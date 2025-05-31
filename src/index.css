@@ -34,6 +34,7 @@ body {
   min-height: 100vh;
   background-color: #ffffff;
   color: #1f2937;
+  overflow-x: hidden; /* Prevent horizontal scroll during transitions */
 }
 
 #root {
@@ -53,4 +54,53 @@ button {
 a {
   text-decoration: none;
   color: inherit;
+}
+
+/* Page transition loading state */
+.page-loading {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(135deg, #ecfdf5, #f3e8ff, #eff6ff);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 9999;
+}
+
+.page-loading::before {
+  content: '';
+  width: 40px;
+  height: 40px;
+  border: 3px solid #10b981;
+  border-top: 3px solid transparent;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+/* Smooth transitions for all interactive elements */
+.transition-smooth {
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Enhanced focus states for accessibility */
+button:focus-visible,
+a:focus-visible {
+  outline: 2px solid #10b981;
+  outline-offset: 2px;
+  border-radius: 4px;
+}
+
+/* Prevent layout shift during transitions */
+.transition-container {
+  position: relative;
+  width: 100%;
+  min-height: 100vh;
 }
