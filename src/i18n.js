@@ -182,7 +182,7 @@ const resources = {
       // Browse by Mood
       mood: {
         title: "Quiero...",
-        subtitle: "Encuentra experiencias que coincidan con tu estado de ánimo",
+        subtitle: "Encontrar experiencias que coincidan con tu estado de ánimo",
         music: {
           title: "Escuchar música en vivo",
           description: "Encuentra lugares con presentaciones en vivo"
