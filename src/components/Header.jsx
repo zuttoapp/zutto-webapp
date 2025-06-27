@@ -34,19 +34,8 @@ function Header({ onSignInClick, showLogout = false, onLogout }) {
             {t('nav.explore')}
           </Link>
           
-          <Link 
-            to="/dashboard" 
-            className={`transition-colors font-nunito font-medium ${
-              isActive('/dashboard') 
-                ? 'text-emerald-600 font-semibold' 
-                : 'text-gray-700 hover:text-emerald-600'
-            }`}
-          >
-            {t('nav.forBusinesses')}
-          </Link>
-          
           <a 
-            href="#about" 
+            href="/about" 
             className="text-gray-700 hover:text-emerald-600 transition-colors font-nunito font-medium"
           >
             {t('nav.about')}

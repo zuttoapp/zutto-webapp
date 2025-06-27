@@ -1,11 +1,15 @@
 import { BrowserRouter as Router, Routes, Route, useLocation } from 'react-router-dom'
 import { AnimatePresence, motion } from 'framer-motion'
 import './i18n' // Initialize i18n
+import { AuthProvider } from './contexts/AuthContext'
+import ProtectedRoute from './components/ProtectedRoute'
 import LandingPage from './pages/LandingPage'
 import SearchPage from './pages/SearchPage'
 import BusinessProfilePage from './pages/BusinessProfilePage'
 import LoginPage from './pages/LoginPage'
-import DashboardPage from './pages/DashboardPage'
+import UserProfilePage from './pages/UserProfilePage'
+import Dashboard from './pages/Dashboard'
+import AboutPage from './pages/AboutPage'
 import './App.css'
 
 // Simple, subtle page transition
@@ -50,6 +54,7 @@ function AnimatedRoutes() {
   return (
     <AnimatePresence mode="wait" initial={false}>
       <Routes location={location} key={location.pathname}>
+        {/* Public Routes */}
         <Route 
           path="/" 
           element={
@@ -59,35 +64,43 @@ function AnimatedRoutes() {
           } 
         />
         <Route 
-          path="/search" 
+          path="/about" 
           element={
             <AnimatedPage>
-              <SearchPage />
+              <AboutPage />
             </AnimatedPage>
           } 
         />
+
+        {/* Protected Routes */}
         <Route 
-          path="/business/:id" 
+          path="/profile" 
           element={
-            <AnimatedPage>
-              <BusinessProfilePage />
-            </AnimatedPage>
+            <ProtectedRoute>
+              <AnimatedPage>
+                <UserProfilePage />
+              </AnimatedPage>
+            </ProtectedRoute>
           } 
         />
         <Route 
-          path="/login" 
+          path="/business-profile" 
           element={
-            <AnimatedPage>
-              <LoginPage />
-            </AnimatedPage>
+            <ProtectedRoute>
+              <AnimatedPage>
+                <BusinessProfilePage />
+              </AnimatedPage>
+            </ProtectedRoute>
           } 
         />
         <Route 
           path="/dashboard" 
           element={
-            <AnimatedPage>
-              <DashboardPage />
-            </AnimatedPage>
+            <ProtectedRoute>
+              <AnimatedPage>
+                <Dashboard />
+              </AnimatedPage>
+            </ProtectedRoute>
           } 
         />
       </Routes>
@@ -98,9 +111,9 @@ function AnimatedRoutes() {
 function App() {
   return (
     <Router>
-      <div className="relative">
+      <AuthProvider>
         <AnimatedRoutes />
-      </div>
+      </AuthProvider>
     </Router>
   )
 }
