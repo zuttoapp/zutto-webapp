@@ -1,60 +1,249 @@
 import { useState } from 'react'
-import { useNavigate } from 'react-router-dom'
+import { useNavigate, useLocation } from 'react-router-dom'
 import { useTranslation } from 'react-i18next'
+import { useAuth } from '../contexts/AuthContext'
 import Header from '../components/Header'
 
 function LoginPage() {
   const navigate = useNavigate()
+  const location = useLocation()
   const { t } = useTranslation()
-  const [email, setEmail] = useState('')
-  const [password, setPassword] = useState('')
+  const { login, signup } = useAuth()
+  const [isLogin, setIsLogin] = useState(true)
+  const [userType, setUserType] = useState('user') // 'user' or 'business'
+  const [formData, setFormData] = useState({
+    email: '',
+    password: '',
+    name: '',
+    businessName: '',
+    description: '',
+    category: '',
+    address: '',
+    phone: ''
+  })
+  const [loading, setLoading] = useState(false)
+  const [error, setError] = useState('')
 
-  const handleSignInClick = () => {
-    navigate('/login')
+  const handleInputChange = (e) => {
+    const { name, value } = e.target
+    setFormData(prev => ({
+      ...prev,
+      [name]: value
+    }))
   }
 
-  const handleLogin = (e) => {
+  const handleUserTypeChange = (type) => {
+    setUserType(type)
+    setFormData({
+      email: '',
+      password: '',
+      name: '',
+      businessName: '',
+      description: '',
+      category: '',
+      address: '',
+      phone: ''
+    })
+  }
+
+  const handleSubmit = async (e) => {
     e.preventDefault()
-    console.log('Login attempt:', { email, password })
-    // In a real app, you'd handle authentication here
-    navigate('/dashboard')
+    setLoading(true)
+    setError('')
+
+    try {
+      const from = location.state?.from?.pathname || (userType === 'user' ? '/profile' : '/business-profile')
+      
+      if (isLogin) {
+        const result = await login(formData.email, formData.password, userType)
+        if (result.success) {
+          navigate(from, { replace: true })
+        } else {
+          setError(result.error || 'Failed to login')
+        }
+      } else {
+        const additionalData = userType === 'user' 
+          ? { name: formData.name }
+          : {
+              businessName: formData.businessName,
+              description: formData.description,
+              category: formData.category,
+              address: formData.address,
+              phone: formData.phone
+            }
+        
+        const result = await signup(formData.email, formData.password, userType, additionalData)
+        if (result.success) {
+          navigate(from, { replace: true })
+        } else {
+          setError(result.error || 'Failed to sign up')
+        }
+      }
+    } catch (err) {
+      setError('An unexpected error occurred')
+      console.error(err)
+    } finally {
+      setLoading(false)
+    }
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-emerald-50 via-purple-50 to-blue-50 font-nunito relative overflow-hidden">
-      {/* Animated Background Elements */}
-      <div className="absolute inset-0 overflow-hidden">
-        <div className="absolute top-20 left-10 w-96 h-96 bg-emerald-300 rounded-full mix-blend-multiply filter blur-3xl opacity-30 animate-pulse"></div>
-        <div className="absolute top-40 right-10 w-80 h-80 bg-purple-300 rounded-full mix-blend-multiply filter blur-3xl opacity-40 animate-pulse delay-1000"></div>
-        <div className="absolute bottom-20 left-1/3 w-72 h-72 bg-blue-300 rounded-full mix-blend-multiply filter blur-3xl opacity-25 animate-pulse delay-2000"></div>
-      </div>
-
+    <div className="min-h-screen bg-gradient-to-br from-emerald-50 via-purple-50 to-blue-50 font-nunito">
       {/* Header Component */}
-      <Header onSignInClick={handleSignInClick} />
+      <Header />
 
       {/* Main Content */}
-      <div className="pt-24 px-4 sm:px-6 lg:px-8 relative z-10">
+      <div className="pt-24 px-4 sm:px-6 lg:px-8">
         <div className="max-w-md mx-auto">
-          {/* Login Form */}
-          <div className="bg-white/80 backdrop-blur-sm rounded-3xl shadow-2xl p-10 border border-white/40">
-            <div className="text-center mb-8">
-              <h1 className="text-4xl font-bold text-gray-900 mb-4 font-nunito">Welcome Back</h1>
-              <p className="text-gray-600 font-nunito">Sign in to discover local experiences</p>
+          {/* User Type Selection */}
+          <div className="bg-white/80 backdrop-blur-sm rounded-3xl shadow-xl p-6 mb-8 border border-white/40">
+            <h2 className="text-2xl font-bold text-gray-900 mb-6 text-center font-nunito">
+              {isLogin ? 'Welcome Back!' : 'Join Zutto'}
+            </h2>
+            <div className="flex gap-4 mb-6">
+              <button
+                onClick={() => handleUserTypeChange('user')}
+                className={`flex-1 py-3 rounded-xl font-semibold transition-all transform hover:scale-105 shadow-lg font-nunito ${
+                  userType === 'user'
+                    ? 'bg-emerald-500 text-white hover:bg-emerald-600 hover:shadow-emerald-200'
+                    : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
+                }`}
+              >
+                Regular User
+              </button>
+              <button
+                onClick={() => handleUserTypeChange('business')}
+                className={`flex-1 py-3 rounded-xl font-semibold transition-all transform hover:scale-105 shadow-lg font-nunito ${
+                  userType === 'business'
+                    ? 'bg-emerald-500 text-white hover:bg-emerald-600 hover:shadow-emerald-200'
+                    : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
+                }`}
+              >
+                Business
+              </button>
             </div>
+          </div>
 
-            <form onSubmit={handleLogin} className="space-y-6">
+          {/* Login/Signup Form */}
+          <div className="bg-white/80 backdrop-blur-sm rounded-3xl shadow-xl p-8 border border-white/40">
+            <form onSubmit={handleSubmit} className="space-y-6">
+              {error && (
+                <div className="p-4 bg-red-50 border border-red-200 rounded-xl text-red-600">
+                  {error}
+                </div>
+              )}
+
+              {!isLogin && userType === 'user' && (
+                <div>
+                  <label htmlFor="name" className="block text-sm font-semibold text-gray-700 mb-2 font-nunito">
+                    Name
+                  </label>
+                  <input
+                    type="text"
+                    id="name"
+                    name="name"
+                    value={formData.name}
+                    onChange={handleInputChange}
+                    required
+                    className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-transparent font-nunito"
+                    placeholder="John Doe"
+                  />
+                </div>
+              )}
+
+              {!isLogin && userType === 'business' && (
+                <>
+                  <div>
+                    <label htmlFor="businessName" className="block text-sm font-semibold text-gray-700 mb-2 font-nunito">
+                      Business Name
+                    </label>
+                    <input
+                      type="text"
+                      id="businessName"
+                      name="businessName"
+                      value={formData.businessName}
+                      onChange={handleInputChange}
+                      required
+                      className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-transparent font-nunito"
+                      placeholder="Juan's Grill"
+                    />
+                  </div>
+                  <div>
+                    <label htmlFor="description" className="block text-sm font-semibold text-gray-700 mb-2 font-nunito">
+                      Description
+                    </label>
+                    <textarea
+                      id="description"
+                      name="description"
+                      value={formData.description}
+                      onChange={handleInputChange}
+                      required
+                      className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-transparent font-nunito"
+                      rows="3"
+                      placeholder="Tell us about your business..."
+                    />
+                  </div>
+                  <div>
+                    <label htmlFor="category" className="block text-sm font-semibold text-gray-700 mb-2 font-nunito">
+                      Category
+                    </label>
+                    <input
+                      type="text"
+                      id="category"
+                      name="category"
+                      value={formData.category}
+                      onChange={handleInputChange}
+                      required
+                      className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-transparent font-nunito"
+                      placeholder="Restaurant, Cafe, etc."
+                    />
+                  </div>
+                  <div>
+                    <label htmlFor="address" className="block text-sm font-semibold text-gray-700 mb-2 font-nunito">
+                      Address
+                    </label>
+                    <input
+                      type="text"
+                      id="address"
+                      name="address"
+                      value={formData.address}
+                      onChange={handleInputChange}
+                      required
+                      className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-transparent font-nunito"
+                      placeholder="123 Main St, San Juan, PR"
+                    />
+                  </div>
+                  <div>
+                    <label htmlFor="phone" className="block text-sm font-semibold text-gray-700 mb-2 font-nunito">
+                      Phone
+                    </label>
+                    <input
+                      type="tel"
+                      id="phone"
+                      name="phone"
+                      value={formData.phone}
+                      onChange={handleInputChange}
+                      required
+                      className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-transparent font-nunito"
+                      placeholder="(787) 555-0123"
+                    />
+                  </div>
+                </>
+              )}
+
               <div>
                 <label htmlFor="email" className="block text-sm font-semibold text-gray-700 mb-2 font-nunito">
-                  Email Address
+                  Email
                 </label>
                 <input
                   type="email"
                   id="email"
-                  value={email}
-                  onChange={(e) => setEmail(e.target.value)}
-                  className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-transparent font-nunito"
-                  placeholder="your@email.com"
+                  name="email"
+                  value={formData.email}
+                  onChange={handleInputChange}
                   required
+                  className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-transparent font-nunito"
+                  placeholder="you@example.com"
                 />
               </div>
 
@@ -65,61 +254,44 @@ function LoginPage() {
                 <input
                   type="password"
                   id="password"
-                  value={password}
-                  onChange={(e) => setPassword(e.target.value)}
+                  name="password"
+                  value={formData.password}
+                  onChange={handleInputChange}
+                  required
                   className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-transparent font-nunito"
                   placeholder="••••••••"
-                  required
                 />
               </div>
 
               <button
                 type="submit"
-                className="w-full bg-emerald-500 hover:bg-emerald-600 text-white py-4 rounded-xl font-bold text-lg transition-all transform hover:scale-105 shadow-xl hover:shadow-emerald-200 font-nunito"
+                disabled={loading}
+                className="w-full bg-emerald-500 hover:bg-emerald-600 text-white py-4 rounded-xl font-bold text-lg transition-all transform hover:scale-105 shadow-xl hover:shadow-emerald-200 font-nunito disabled:opacity-50 disabled:cursor-not-allowed"
               >
-                Sign In
+                {loading ? 'Please wait...' : isLogin ? 'Sign In' : 'Create Account'}
               </button>
             </form>
 
-            <div className="mt-8">
-              <div className="relative">
-                <div className="absolute inset-0 flex items-center">
-                  <div className="w-full border-t border-gray-300"></div>
-                </div>
-                <div className="relative flex justify-center text-sm">
-                  <span className="px-2 bg-white text-gray-500 font-nunito">Or continue with</span>
-                </div>
-              </div>
-
-              <div className="mt-6 grid grid-cols-2 gap-3">
-                <button className="w-full inline-flex justify-center py-3 px-4 border border-gray-300 rounded-xl shadow-sm bg-white text-sm font-medium text-gray-500 hover:bg-gray-50 transition-colors font-nunito">
-                  <span className="text-xl mr-2">🔍</span>
-                  Google
-                </button>
-                <button className="w-full inline-flex justify-center py-3 px-4 border border-gray-300 rounded-xl shadow-sm bg-white text-sm font-medium text-gray-500 hover:bg-gray-50 transition-colors font-nunito">
-                  <span className="text-xl mr-2">📘</span>
-                  Facebook
-                </button>
-              </div>
-            </div>
-
-            <div className="mt-8 text-center">
-              <p className="text-gray-600 font-nunito">
-                Don't have an account?{' '}
-                <button className="text-emerald-600 hover:text-emerald-700 font-semibold font-nunito">
-                  Sign up
-                </button>
-              </p>
+            <div className="mt-6 text-center">
+              <button
+                onClick={() => setIsLogin(!isLogin)}
+                className="text-emerald-600 hover:text-emerald-700 font-semibold font-nunito"
+              >
+                {isLogin ? "Don't have an account? Sign up" : 'Already have an account? Sign in'}
+              </button>
             </div>
           </div>
 
-          {/* Debug Info */}
-          <div className="mt-8 bg-white/80 backdrop-blur-sm rounded-2xl shadow-lg p-6 border border-gray-200">
-            <h3 className="text-lg font-bold text-gray-900 mb-4 font-nunito">Login Demo</h3>
-            <div className="space-y-2 text-gray-600 font-nunito">
-              <p><strong>Page:</strong> Login</p>
-              <p><strong>Status:</strong> Demo Mode</p>
-              <p><strong>Note:</strong> Any email/password will work for demo</p>
+          {/* Social Login */}
+          <div className="mt-8 text-center">
+            <p className="text-gray-600 mb-4 font-nunito">Or continue with</p>
+            <div className="flex justify-center gap-4">
+              <button className="p-3 bg-white rounded-xl shadow-lg hover:shadow-xl transition-all transform hover:scale-105">
+                <span className="text-2xl">🌐</span>
+              </button>
+              <button className="p-3 bg-white rounded-xl shadow-lg hover:shadow-xl transition-all transform hover:scale-105">
+                <span className="text-2xl">📱</span>
+              </button>
             </div>
           </div>
         </div>
