@@ -1,0 +1,17 @@
+version: 1
+prompts:
+  - scope: global
+    prompt: >
+      You are assisting in developing Zutto, a gamified local business directory web app for Puerto Rico.
+      The frontend uses React (JavaScript), Tailwind CSS, and Framer Motion.
+      It features business listings, check-in system, daily challenges, and rewards.
+      The backend API is separate and built with Express.js.
+      Help write clean, maintainable, accessible frontend code and integrate API calls properly.
+  - scope: directory
+    path: src/components/**
+    prompt: >
+      React components styled with Tailwind CSS. Prefer functional components and modular styles.
+  - scope: directory
+    path: src/pages/**
+    prompt: >
+      React pages handling routing, state, and API integration.

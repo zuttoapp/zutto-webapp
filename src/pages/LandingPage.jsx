@@ -1,437 +1,269 @@
 import { Link, useNavigate } from 'react-router-dom'
 import { useTranslation } from 'react-i18next'
+import { useState, useEffect, useRef, useCallback } from 'react'
 import Header from '../components/Header'
 
-function LandingPage() {
-  const navigate = useNavigate()
-  const { t } = useTranslation()
+const HERO_VIDEOS = [
+  '/videos/zutto_landing_overlay.mp4',
+  '/videos/zutto_landing_overlay_2.mp4',
+  '/videos/zutto_landing_overlay_3.mp4',
+  '/videos/zutto_landing_overlay_4.mp4'
+]
 
-  const handleExploreClick = () => {
-    console.log('User clicked explore - redirecting to search')
-    navigate('/search')
+const VIDEO_DURATIONS = [15000, 15000, 15000, 25000]; // Last video: 25s
+const TRANSITION_DURATION = 800; // Consistent transition timing
+const FALLBACK_IMAGE = '/images/hero-poster.jpg';
+
+function LandingPage() {
+  const { t } = useTranslation()
+  const [videoIndex, setVideoIndex] = useState(0)
+  const [isTransitioning, setIsTransitioning] = useState(false)
+  const [prefersReducedMotion, setPrefersReducedMotion] = useState(false)
+  const [hasVideoError, setHasVideoError] = useState(false)
+  const videoRef = useRef(null)
+  const transitionTimeoutRef = useRef(null)
+  const autoAdvanceTimeoutRef = useRef(null)
+
+  // Cleanup function for video and timeouts
+  useEffect(() => {
+    return () => {
+      if (videoRef.current) {
+        videoRef.current.pause()
+        videoRef.current.src = ''
+      }
+      if (transitionTimeoutRef.current) {
+        clearTimeout(transitionTimeoutRef.current)
+      }
+      if (autoAdvanceTimeoutRef.current) {
+        clearTimeout(autoAdvanceTimeoutRef.current)
+      }
+    }
+  }, [])
+
+  // Detect reduced motion
+  useEffect(() => {
+    const mediaQuery = window.matchMedia('(prefers-reduced-motion: reduce)')
+    setPrefersReducedMotion(mediaQuery.matches)
+    const handler = () => setPrefersReducedMotion(mediaQuery.matches)
+    mediaQuery.addEventListener('change', handler)
+    return () => mediaQuery.removeEventListener('change', handler)
+  }, [])
+
+  // Auto-advance videos with consistent timing
+  useEffect(() => {
+    if (prefersReducedMotion || hasVideoError) return
+    
+    // Clear any existing timeout
+    if (autoAdvanceTimeoutRef.current) {
+      clearTimeout(autoAdvanceTimeoutRef.current)
+    }
+    
+    autoAdvanceTimeoutRef.current = setTimeout(() => {
+      setIsTransitioning(true)
+      
+      transitionTimeoutRef.current = setTimeout(() => {
+        setVideoIndex((i) => (i + 1) % HERO_VIDEOS.length)
+        setIsTransitioning(false)
+      }, TRANSITION_DURATION)
+    }, VIDEO_DURATIONS[videoIndex])
+    
+    return () => {
+      if (autoAdvanceTimeoutRef.current) {
+        clearTimeout(autoAdvanceTimeoutRef.current)
+      }
+    }
+  }, [videoIndex, prefersReducedMotion, hasVideoError])
+
+  // Manual video switch with race condition protection
+  const handleIndicatorClick = (idx) => {
+    if (isTransitioning || idx === videoIndex) return
+    
+    // Clear auto-advance timeout to prevent conflicts
+    if (autoAdvanceTimeoutRef.current) {
+      clearTimeout(autoAdvanceTimeoutRef.current)
+    }
+    
+    setIsTransitioning(true)
+    
+    transitionTimeoutRef.current = setTimeout(() => {
+      setVideoIndex(idx)
+      setIsTransitioning(false)
+    }, TRANSITION_DURATION)
   }
 
-  const handleSignInClick = () => {
-    navigate('/login')
+  // Handle video errors
+  const handleVideoError = (e) => {
+    console.error('Video failed to load:', HERO_VIDEOS[videoIndex], e)
+    setHasVideoError(true)
+    
+    // Try to advance to next video after a delay
+    setTimeout(() => {
+      setHasVideoError(false)
+      setVideoIndex((i) => (i + 1) % HERO_VIDEOS.length)
+    }, 2000)
+  }
+
+  // Handle successful video load
+  const handleVideoLoad = () => {
+    setHasVideoError(false)
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-emerald-50 via-purple-50 to-blue-50 font-nunito relative overflow-hidden">
-      {/* Animated Background Elements */}
-      <div className="absolute inset-0 overflow-hidden">
-        {/* Pulsing Radar Rings */}
-        <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2">
-          <div className="radar-ring"></div>
-          <div className="radar-ring delay-1000"></div>
-          <div className="radar-ring delay-2000"></div>
+    <div className="min-h-screen font-nunito">
+      <Header />
+      <section className="pt-20 sm:pt-32 lg:pt-40 relative overflow-hidden" style={{ minHeight: '100vh' }}>
+        {/* Video or fallback image */}
+        <div className="absolute inset-0 w-full h-full -z-10">
+          {!prefersReducedMotion && !hasVideoError ? (
+            <video
+              ref={videoRef}
+              autoPlay
+              muted
+              playsInline
+              preload="metadata"
+              poster={FALLBACK_IMAGE}
+              src={HERO_VIDEOS[videoIndex]}
+              className="w-full h-full object-cover transition-opacity duration-500"
+              style={{ opacity: isTransitioning ? 0 : 1 }}
+              onEnded={() => setVideoIndex((i) => (i + 1) % HERO_VIDEOS.length)}
+              onError={handleVideoError}
+              onLoadedData={handleVideoLoad}
+            />
+          ) : (
+            <img
+              src={FALLBACK_IMAGE}
+              alt="Hero background"
+              className="w-full h-full object-cover"
+            />
+          )}
+          {/* Optional: subtle overlay for text readability */}
+          <div className="absolute inset-0 bg-slate-900/50 pointer-events-none" />
         </div>
-        
-        {/* Floating Glow Blobs */}
-        <div className="absolute top-20 left-10 w-96 h-96 bg-emerald-300 rounded-full mix-blend-multiply filter blur-3xl opacity-30 animate-pulse"></div>
-        <div className="absolute top-40 right-10 w-80 h-80 bg-purple-300 rounded-full mix-blend-multiply filter blur-3xl opacity-40 animate-pulse delay-1000"></div>
-        <div className="absolute bottom-20 left-1/3 w-72 h-72 bg-blue-300 rounded-full mix-blend-multiply filter blur-3xl opacity-25 animate-pulse delay-2000"></div>
-        <div className="absolute top-60 right-1/4 w-64 h-64 bg-emerald-400 rounded-full mix-blend-multiply filter blur-2xl opacity-20 animate-pulse delay-500"></div>
+
+        {/* Centered Content */}
+        <div className="relative flex flex-col items-center justify-center min-h-[60vh] text-center px-4 z-10">
+          <div className="inline-flex items-center bg-white/90 backdrop-blur-md rounded-full px-4 py-2 mb-8 shadow-xl">
+            <div className="w-3 h-3 rounded-full mr-3 animate-pulse" style={{ backgroundColor: '#228B22' }} />
+            <span className="text-sm text-gray-700 font-medium">{t('hero.statusBadge')}</span>
+          </div>
+          <h1 className="text-3xl sm:text-5xl md:text-7xl font-bold text-white mb-6" style={{
+            textShadow: '0 4px 20px rgba(0,0,0,0.6)'
+          }}>
+            {t('hero.headline')}
+          </h1>
+          <p className="text-base sm:text-xl text-white max-w-2xl mx-auto font-light" style={{
+            textShadow: '0 2px 8px rgba(0,0,0,0.4)'
+          }}>
+            {t('hero.subtext')}
+          </p>
+          {/* Dots removed for a cleaner look */}
+        </div>
+      </section>
+
+      {/* Early Access Section - now inside hero, improved for mobile */}
+      <div className="relative z-10 w-full flex justify-center mt-6 sm:mt-10">
+        <div className="
+          w-full
+          max-w-md sm:max-w-xl md:max-w-2xl
+          px-4 sm:px-6 py-6 sm:py-8
+          bg-yellow-50 bg-opacity-95
+          border border-yellow-200
+          rounded-xl sm:rounded-2xl
+          text-center
+          shadow-lg
+          backdrop-blur-md
+        ">
+          <h3 className="text-base sm:text-lg font-bold text-yellow-800 mb-2 font-nunito">{t('earlyAccess.title')}</h3>
+          <p className="text-gray-700 text-sm sm:text-base font-nunito">
+            {t('earlyAccess.description')}
+          </p>
+        </div>
       </div>
 
-      {/* Header Component */}
-      <Header onSignInClick={handleSignInClick} />
-
-      {/* Hero Section */}
-      <section className="pt-40 pb-32 px-4 sm:px-6 lg:px-8 relative z-10">
-        <div className="w-full mx-auto text-center">
-          {/* Status Badge */}
-          <div className="inline-flex items-center bg-white/80 backdrop-blur-sm rounded-full px-6 py-3 mb-12 border border-emerald-200/50 shadow-lg">
-            <div className="w-3 h-3 bg-emerald-500 rounded-full mr-3 animate-pulse"></div>
-            <span className="text-sm text-gray-700 font-nunito font-medium">{t('hero.statusBadge')}</span>
-          </div>
-          
-          {/* Main Headline */}
-          <h1 className="text-7xl md:text-8xl font-bold text-gray-900 mb-8 leading-tight font-nunito">
-            {t('hero.headline')}
-            <span className="bg-gradient-to-r from-emerald-500 via-purple-500 to-blue-500 bg-clip-text text-transparent block mt-2">{t('hero.headlineAccent')}</span>
-          </h1>
-          
-          {/* Subtext */}
-          <p className="text-2xl text-gray-600 mb-16 max-w-3xl mx-auto leading-relaxed font-nunito font-light">
-            {t('hero.subtext')} <span className="font-semibold text-emerald-600">{t('hero.subtextAccent')}</span>
-          </p>
-          
-          {/* CTA Buttons */}
-          <div className="flex flex-col sm:flex-row gap-6 justify-center mb-20 relative">
-            {/* Main CTA Button */}
-            <button 
-              onClick={handleExploreClick}
-              className="bg-emerald-500 hover:bg-emerald-600 text-white px-10 py-5 rounded-2xl font-bold text-lg transition-all transform hover:scale-105 shadow-xl hover:shadow-2xl hover:shadow-emerald-200 flex items-center justify-center gap-3 font-nunito relative overflow-hidden group"
-            >
-              <div className="absolute inset-0 bg-gradient-to-r from-emerald-400 to-emerald-600 opacity-0 group-hover:opacity-100 transition-opacity"></div>
-              <span className="relative z-10">{t('hero.exploreButton')}</span>
-            </button>
-            
-            {/* Secondary CTA */}
-            <Link 
-              to="/business/demo"
-              className="bg-transparent hover:bg-emerald-50 text-emerald-600 border-2 border-emerald-500 hover:border-emerald-600 px-10 py-5 rounded-2xl font-bold text-lg transition-all transform hover:scale-105 hover:shadow-xl hover:shadow-emerald-100 flex items-center justify-center gap-3 font-nunito group"
-            >
-              <span>{t('hero.scanButton')}</span>
-            </Link>
-          </div>
-
-          {/* Experience Categories */}
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mt-20 max-w-5xl mx-auto">
-            <Link 
-              to="/search?category=music"
-              className="bg-white/80 backdrop-blur-sm rounded-3xl shadow-xl p-10 border border-white/40 hover:transform hover:scale-105 hover:-rotate-1 transition-all duration-300 block group hover:shadow-2xl hover:shadow-purple-100"
-            >
-              <div className="text-6xl mb-6 group-hover:scale-110 transition-transform">🎵</div>
-              <h3 className="text-2xl font-bold text-gray-900 mb-3 font-nunito">{t('categories.music.title')}</h3>
-              <p className="text-gray-600 font-nunito">{t('categories.music.description')}</p>
-            </Link>
-            
-            <Link 
-              to="/search?category=coffee"
-              className="bg-white/80 backdrop-blur-sm rounded-3xl shadow-xl p-10 border border-white/40 hover:transform hover:scale-105 hover:rotate-1 transition-all duration-300 block group hover:shadow-2xl hover:shadow-amber-100"
-            >
-              <div className="text-6xl mb-6 group-hover:scale-110 transition-transform">☕</div>
-              <h3 className="text-2xl font-bold text-gray-900 mb-3 font-nunito">{t('categories.coffee.title')}</h3>
-              <p className="text-gray-600 font-nunito">{t('categories.coffee.description')}</p>
-            </Link>
-            
-            <Link 
-              to="/search?category=art"
-              className="bg-white/80 backdrop-blur-sm rounded-3xl shadow-xl p-10 border border-white/40 hover:transform hover:scale-105 hover:-rotate-1 transition-all duration-300 block group hover:shadow-2xl hover:shadow-pink-100"
-            >
-              <div className="text-6xl mb-6 group-hover:scale-110 transition-transform">🎨</div>
-              <h3 className="text-2xl font-bold text-gray-900 mb-3 font-nunito">{t('categories.art.title')}</h3>
-              <p className="text-gray-600 font-nunito">{t('categories.art.description')}</p>
-            </Link>
-          </div>
-        </div>
-      </section>
-
-      {/* How Zutto Works */}
-      <section className="py-32 px-4 sm:px-6 lg:px-8 bg-white/60 backdrop-blur-sm relative">
+      {/* How Zutto Works - Clean white background */}
+      <section className="py-16 sm:py-24 lg:py-32 px-4 sm:px-6 lg:px-8 bg-white relative">
         <div className="w-full mx-auto">
-          <div className="text-center mb-20">
-            <h2 className="text-6xl font-bold text-gray-900 mb-6 font-nunito">
+          <div className="text-center mb-12 sm:mb-16 lg:mb-20">
+            <h2 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold text-gray-900 mb-4 sm:mb-6 font-nunito">
               {t('howItWorks.title')}
             </h2>
-            <p className="text-2xl text-gray-600 font-nunito font-light">{t('howItWorks.subtitle')}</p>
+            <p className="text-lg sm:text-xl lg:text-2xl text-gray-600 font-nunito font-light px-4 sm:px-0">
+              {t('howItWorks.subtitle')}
+            </p>
           </div>
           
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-12 relative max-w-7xl mx-auto">
-            {/* Connection lines */}
-            <div className="hidden md:block absolute top-1/2 left-1/3 w-1/3 h-1 bg-gradient-to-r from-emerald-300 to-purple-300 transform -translate-y-1/2 rounded-full"></div>
-            <div className="hidden md:block absolute top-1/2 right-1/3 w-1/3 h-1 bg-gradient-to-r from-purple-300 to-blue-300 transform -translate-y-1/2 rounded-full"></div>
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-8 sm:gap-12 relative max-w-7xl mx-auto">
+            {/* Connection lines - Hidden on smaller screens */}
+            <div className="hidden lg:block absolute top-1/2 left-1/3 w-1/3 h-1 transform -translate-y-1/2 rounded-full" style={{
+              background: `linear-gradient(to right, #228B2250, #a855f750)`
+            }}></div>
+            <div className="hidden lg:block absolute top-1/2 right-1/3 w-1/3 h-1 transform -translate-y-1/2 rounded-full" style={{
+              background: `linear-gradient(to right, #a855f750, #3b82f650)`
+            }}></div>
             
-            <div className="bg-gradient-to-br from-emerald-50 to-emerald-100 rounded-3xl shadow-2xl p-10 text-center hover:shadow-3xl transition-all transform hover:scale-105 relative z-10 border border-emerald-200/50">
-              <div className="w-24 h-24 bg-emerald-500 rounded-full mx-auto mb-8 flex items-center justify-center text-4xl shadow-xl">
-                🔍
+            {/* Step 1: Discover */}
+            <div className="rounded-2xl sm:rounded-3xl shadow-2xl p-6 sm:p-8 lg:p-10 text-center hover:shadow-3xl transition-all transform hover:scale-105 relative z-10" style={{
+              background: `linear-gradient(to bottom right, #228B221a, #64B0461a)`,
+              border: '1px solid #228B2230'
+            }}>
+              <div className="w-16 h-16 sm:w-20 sm:h-20 lg:w-24 lg:h-24 rounded-full mx-auto mb-6 sm:mb-8 flex items-center justify-center text-2xl sm:text-3xl lg:text-4xl shadow-xl" style={{
+                backgroundColor: '#228B22'
+              }}>
+                📍
               </div>
-              <h3 className="text-3xl font-bold text-gray-900 mb-6 font-nunito">{t('howItWorks.step1.title')}</h3>
-              <p className="text-gray-600 leading-relaxed text-lg font-nunito">{t('howItWorks.step1.description')}</p>
+              <h3 className="text-xl sm:text-2xl lg:text-3xl font-bold text-gray-900 mb-4 sm:mb-6 font-nunito">{t('howItWorks.step1.title')}</h3>
+              <p className="text-gray-600 leading-relaxed text-base sm:text-lg font-nunito">{t('howItWorks.step1.description')}</p>
             </div>
             
-            <div className="bg-gradient-to-br from-purple-50 to-purple-100 rounded-3xl shadow-2xl p-10 text-center hover:shadow-3xl transition-all transform hover:scale-105 relative z-10 border border-purple-200/50">
-              <div className="w-24 h-24 bg-purple-500 rounded-full mx-auto mb-8 flex items-center justify-center text-4xl shadow-xl">
-                ✅
+            {/* Step 2: Check In */}
+            <div className="bg-gradient-to-br from-purple-50 to-purple-100 rounded-2xl sm:rounded-3xl shadow-2xl p-6 sm:p-8 lg:p-10 text-center hover:shadow-3xl transition-all transform hover:scale-105 relative z-10 border border-purple-200/50">
+              <div className="w-16 h-16 sm:w-20 sm:h-20 lg:w-24 lg:h-24 bg-purple-500 rounded-full mx-auto mb-6 sm:mb-8 flex items-center justify-center text-2xl sm:text-3xl lg:text-4xl shadow-xl">
+                📲
               </div>
-              <h3 className="text-3xl font-bold text-gray-900 mb-6 font-nunito">{t('howItWorks.step2.title')}</h3>
-              <p className="text-gray-600 leading-relaxed text-lg font-nunito">{t('howItWorks.step2.description')}</p>
+              <h3 className="text-xl sm:text-2xl lg:text-3xl font-bold text-gray-900 mb-4 sm:mb-6 font-nunito">{t('howItWorks.step2.title')}</h3>
+              <p className="text-gray-600 leading-relaxed text-base sm:text-lg font-nunito">{t('howItWorks.step2.description')}</p>
             </div>
             
-            <div className="bg-gradient-to-br from-blue-50 to-blue-100 rounded-3xl shadow-2xl p-10 text-center hover:shadow-3xl transition-all transform hover:scale-105 relative z-10 border border-blue-200/50">
-              <div className="w-24 h-24 bg-blue-500 rounded-full mx-auto mb-8 flex items-center justify-center text-4xl shadow-xl">
-                💫
+            {/* Step 3: Earn Rewards */}
+            <div className="bg-gradient-to-br from-blue-50 to-blue-100 rounded-2xl sm:rounded-3xl shadow-2xl p-6 sm:p-8 lg:p-10 text-center hover:shadow-3xl transition-all transform hover:scale-105 relative z-10 border border-blue-200/50">
+              <div className="w-16 h-16 sm:w-20 sm:h-20 lg:w-24 lg:h-24 bg-blue-500 rounded-full mx-auto mb-6 sm:mb-8 flex items-center justify-center text-2xl sm:text-3xl lg:text-4xl shadow-xl">
+                🎉
               </div>
-              <h3 className="text-3xl font-bold text-gray-900 mb-6 font-nunito">{t('howItWorks.step3.title')}</h3>
-              <p className="text-gray-600 leading-relaxed text-lg font-nunito">{t('howItWorks.step3.description')}</p>
+              <h3 className="text-xl sm:text-2xl lg:text-3xl font-bold text-gray-900 mb-4 sm:mb-6 font-nunito">{t('howItWorks.step3.title')}</h3>
+              <p className="text-gray-600 leading-relaxed text-base sm:text-lg font-nunito">{t('howItWorks.step3.description')}</p>
             </div>
           </div>
         </div>
       </section>
 
-      {/* Live Activity Feed */}
-      <section className="py-32 px-4 sm:px-6 lg:px-8 bg-gradient-to-br from-gray-50/80 to-emerald-50/80 backdrop-blur-sm relative">
-        <div className="w-full mx-auto">
-          <div className="text-center mb-20">
-            <div className="inline-flex items-center bg-emerald-100/80 backdrop-blur-sm rounded-full px-6 py-3 mb-6 border border-emerald-200/50">
-              <div className="w-4 h-4 bg-emerald-500 rounded-full mr-3 animate-pulse"></div>
-              <span className="text-emerald-700 font-semibold font-nunito">{t('liveActivity.badge')}</span>
-            </div>
-            <h2 className="text-6xl font-bold text-gray-900 mb-6 font-nunito">
-              {t('liveActivity.title')}
-            </h2>
-            <p className="text-2xl text-gray-600 font-nunito font-light">{t('liveActivity.subtitle')}</p>
-          </div>
-          
-          <div className="flex overflow-x-auto gap-8 pb-6 scrollbar-hide px-4">
-            <div className="bg-white/90 backdrop-blur-sm rounded-3xl shadow-2xl p-8 min-w-96 hover:shadow-3xl transition-all border border-white/50 hover:transform hover:scale-105">
-              <div className="flex items-center mb-6">
-                <div className="w-16 h-16 bg-orange-100 rounded-full flex items-center justify-center mr-4">
-                  🍽️
-                </div>
-                <div className="flex-1">
-                  <div className="flex items-center gap-3">
-                    <span className="text-3xl font-bold text-orange-600 font-nunito">5</span>
-                    <span className="text-sm text-gray-500 font-nunito">{t('liveActivity.checkedIn')}</span>
-                  </div>
-                </div>
-              </div>
-              <h3 className="text-xl font-bold text-gray-900 mb-3 font-nunito">Juan's Grill</h3>
-              <p className="text-gray-600 font-nunito">Authentic Puerto Rican cuisine • Old San Juan</p>
-            </div>
-            
-            <div className="bg-white/90 backdrop-blur-sm rounded-3xl shadow-2xl p-8 min-w-96 hover:shadow-3xl transition-all border border-white/50 hover:transform hover:scale-105">
-              <div className="flex items-center mb-6">
-                <div className="w-16 h-16 bg-purple-100 rounded-full flex items-center justify-center mr-4">
-                  🏺
-                </div>
-                <div className="flex-1">
-                  <div className="flex items-center gap-3">
-                    <span className="text-yellow-500 text-xl">⭐</span>
-                    <span className="text-sm text-gray-500 font-nunito">{t('liveActivity.featured')}</span>
-                  </div>
-                </div>
-              </div>
-              <h3 className="text-xl font-bold text-gray-900 mb-3 font-nunito">Local Pottery Den</h3>
-              <p className="text-gray-600 font-nunito">Handmade ceramics • Pottery classes</p>
-            </div>
-            
-            <div className="bg-white/90 backdrop-blur-sm rounded-3xl shadow-2xl p-8 min-w-96 hover:shadow-3xl transition-all border border-white/50 hover:transform hover:scale-105">
-              <div className="flex items-center mb-6">
-                <div className="w-16 h-16 bg-pink-100 rounded-full flex items-center justify-center mr-4">
-                  📚
-                </div>
-                <div className="flex-1">
-                  <div className="flex items-center gap-3">
-                    <span className="text-emerald-500 text-xl">🆕</span>
-                    <span className="text-sm text-gray-500 font-nunito">{t('liveActivity.newAddition')}</span>
-                  </div>
-                </div>
-              </div>
-              <h3 className="text-xl font-bold text-gray-900 mb-3 font-nunito">Indie Zine Corner</h3>
-              <p className="text-gray-600 font-nunito">Independent publications • Santurce</p>
-            </div>
-            
-            <div className="bg-white/90 backdrop-blur-sm rounded-3xl shadow-2xl p-8 min-w-96 hover:shadow-3xl transition-all border border-white/50 hover:transform hover:scale-105">
-              <div className="flex items-center mb-6">
-                <div className="w-16 h-16 bg-blue-100 rounded-full flex items-center justify-center mr-4">
-                  🎨
-                </div>
-                <div className="flex-1">
-                  <div className="flex items-center gap-3">
-                    <span className="text-red-500 text-xl">🔥</span>
-                    <span className="text-sm text-gray-500 font-nunito">{t('liveActivity.trending')}</span>
-                  </div>
-                </div>
-              </div>
-              <h3 className="text-xl font-bold text-gray-900 mb-3 font-nunito">Art Walk Downtown</h3>
-              <p className="text-gray-600 font-nunito">Monthly art exhibition • Free entry</p>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* Browse by Mood */}
-      <section className="py-32 px-4 sm:px-6 lg:px-8 bg-white/60 backdrop-blur-sm relative">
-        <div className="w-full mx-auto">
-          <div className="text-center mb-20">
-            <h2 className="text-6xl font-bold text-gray-900 mb-6 font-nunito">
-              {t('mood.title')}
-            </h2>
-            <p className="text-2xl text-gray-600 font-nunito font-light">{t('mood.subtitle')}</p>
-          </div>
-          
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 max-w-8xl mx-auto">
-            <Link 
-              to="/search?mood=music"
-              className="bg-gradient-to-br from-pink-100/80 to-rose-200/80 backdrop-blur-sm rounded-3xl p-10 text-center hover:shadow-2xl transition-all transform hover:scale-105 cursor-pointer group block border border-pink-200/50"
-            >
-              <div className="text-6xl mb-6 group-hover:scale-110 transition-transform">🎵</div>
-              <h3 className="text-2xl font-bold text-gray-900 mb-4 font-nunito">{t('mood.music.title')}</h3>
-              <p className="text-gray-600 font-nunito">{t('mood.music.description')}</p>
-            </Link>
-            
-            <Link 
-              to="/search?mood=cafe"
-              className="bg-gradient-to-br from-blue-100/80 to-cyan-200/80 backdrop-blur-sm rounded-3xl p-10 text-center hover:shadow-2xl transition-all transform hover:scale-105 cursor-pointer group block border border-blue-200/50"
-            >
-              <div className="text-6xl mb-6 group-hover:scale-110 transition-transform">☕</div>
-              <h3 className="text-2xl font-bold text-gray-900 mb-4 font-nunito">{t('mood.cafe.title')}</h3>
-              <p className="text-gray-600 font-nunito">{t('mood.cafe.description')}</p>
-            </Link>
-            
-            <Link 
-              to="/search?mood=relax"
-              className="bg-gradient-to-br from-green-100/80 to-emerald-200/80 backdrop-blur-sm rounded-3xl p-10 text-center hover:shadow-2xl transition-all transform hover:scale-105 cursor-pointer group block border border-emerald-200/50"
-            >
-              <div className="text-6xl mb-6 group-hover:scale-110 transition-transform">🧘</div>
-              <h3 className="text-2xl font-bold text-gray-900 mb-4 font-nunito">{t('mood.relax.title')}</h3>
-              <p className="text-gray-600 font-nunito">{t('mood.relax.description')}</p>
-            </Link>
-            
-            <Link 
-              to="/search?mood=shopping"
-              className="bg-gradient-to-br from-purple-100/80 to-violet-200/80 backdrop-blur-sm rounded-3xl p-10 text-center hover:shadow-2xl transition-all transform hover:scale-105 cursor-pointer group block border border-purple-200/50"
-            >
-              <div className="text-6xl mb-6 group-hover:scale-110 transition-transform">🛍️</div>
-              <h3 className="text-2xl font-bold text-gray-900 mb-4 font-nunito">{t('mood.shopping.title')}</h3>
-              <p className="text-gray-600 font-nunito">{t('mood.shopping.description')}</p>
-            </Link>
-          </div>
-        </div>
-      </section>
-
-      {/* Social Proof */}
-      <section className="py-32 px-4 sm:px-6 lg:px-8 bg-gradient-to-br from-gray-50/80 to-purple-50/80 backdrop-blur-sm relative">
-        <div className="w-full mx-auto">
-          <div className="text-center mb-20">
-            <h2 className="text-6xl font-bold text-gray-900 mb-6 font-nunito">
-              {t('testimonials.title')}
-            </h2>
-            <p className="text-2xl text-gray-600 font-nunito font-light">{t('testimonials.subtitle')}</p>
-          </div>
-          
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-10 max-w-7xl mx-auto">
-            <div className="bg-white/90 backdrop-blur-sm rounded-3xl shadow-2xl p-10 hover:shadow-3xl transition-all border border-white/50">
-              <div className="flex mb-6">
-                {[...Array(5)].map((_, i) => (
-                  <span key={i} className="text-yellow-400 text-2xl">⭐</span>
-                ))}
-              </div>
-              <p className="text-gray-700 mb-8 italic leading-relaxed text-lg font-nunito">
-                "{t('testimonials.maria.text')}"
-              </p>
-              <div className="flex items-center">
-                <div className="w-16 h-16 bg-gradient-to-br from-blue-400 to-purple-500 rounded-full mr-6 flex items-center justify-center text-white font-bold text-xl font-nunito">
-                  M
-                </div>
-                <div>
-                  <p className="font-bold text-gray-900 text-lg font-nunito">{t('testimonials.maria.name')}</p>
-                  <p className="text-gray-500 font-nunito">{t('testimonials.maria.role')}</p>
-                </div>
-              </div>
-            </div>
-            
-            <div className="bg-white/90 backdrop-blur-sm rounded-3xl shadow-2xl p-10 hover:shadow-3xl transition-all border border-white/50">
-              <div className="flex mb-6">
-                {[...Array(5)].map((_, i) => (
-                  <span key={i} className="text-yellow-400 text-2xl">⭐</span>
-                ))}
-              </div>
-              <p className="text-gray-700 mb-8 italic leading-relaxed text-lg font-nunito">
-                "{t('testimonials.carlos.text')}"
-              </p>
-              <div className="flex items-center">
-                <div className="w-16 h-16 bg-gradient-to-br from-green-400 to-blue-500 rounded-full mr-6 flex items-center justify-center text-white font-bold text-xl font-nunito">
-                  C
-                </div>
-                <div>
-                  <p className="font-bold text-gray-900 text-lg font-nunito">{t('testimonials.carlos.name')}</p>
-                  <p className="text-gray-500 font-nunito">{t('testimonials.carlos.role')}</p>
-                </div>
-              </div>
-            </div>
-            
-            <div className="bg-white/90 backdrop-blur-sm rounded-3xl shadow-2xl p-10 hover:shadow-3xl transition-all border border-white/50">
-              <div className="flex mb-6">
-                {[...Array(5)].map((_, i) => (
-                  <span key={i} className="text-yellow-400 text-2xl">⭐</span>
-                ))}
-              </div>
-              <p className="text-gray-700 mb-8 italic leading-relaxed text-lg font-nunito">
-                "{t('testimonials.ana.text')}"
-              </p>
-              <div className="flex items-center">
-                <div className="w-16 h-16 bg-gradient-to-br from-pink-400 to-red-500 rounded-full mr-6 flex items-center justify-center text-white font-bold text-xl font-nunito">
-                  A
-                </div>
-                <div>
-                  <p className="font-bold text-gray-900 text-lg font-nunito">{t('testimonials.ana.name')}</p>
-                  <p className="text-gray-500 font-nunito">{t('testimonials.ana.role')}</p>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* Final CTA */}
-      <section className="py-32 px-4 sm:px-6 lg:px-8 bg-gradient-to-r from-emerald-500 via-purple-600 to-blue-600 relative overflow-hidden">
-        <div className="absolute inset-0 bg-black/10"></div>
-        <div className="w-full max-w-5xl mx-auto text-center relative z-10">
-          <h2 className="text-6xl font-bold text-white mb-8 font-nunito">
+      {/* Final CTA - Simple & Focused */}
+      <section className="py-16 sm:py-24 lg:py-32 px-4 sm:px-6 lg:px-8 relative" style={{
+        backgroundColor: '#228B22'
+      }}>
+        <div className="w-full max-w-4xl mx-auto text-center">
+          <h2 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold text-white mb-6 sm:mb-8 font-nunito">
             {t('finalCta.title')}
           </h2>
-          <p className="text-2xl text-white/90 mb-16 max-w-3xl mx-auto font-nunito font-light">
+          <p className="text-lg sm:text-xl lg:text-2xl text-white/90 mb-12 sm:mb-16 max-w-xs sm:max-w-2xl lg:max-w-3xl mx-auto font-nunito font-light px-4 sm:px-0">
             {t('finalCta.subtitle')}
           </p>
           
-          <div className="flex flex-col sm:flex-row gap-6 justify-center">
-            {/* Join Community Button */}
-            <Link 
-              to="/login"
-              className="bg-white hover:bg-gray-50 text-emerald-600 px-10 py-5 rounded-2xl font-bold text-lg transition-all transform hover:scale-105 shadow-2xl flex items-center justify-center gap-3 font-nunito"
+          <div className="flex justify-center">
+            {/* Join Waitlist Button - Primary */}
+            <a
+              href="https://docs.google.com/forms/d/e/1FAIpQLSc4Ad9wDksTky7wIUvUEVnpXKVQ4iPECG5bID1w8hSIPiGjfQ/viewform?usp=dialog"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-flex items-center gap-2 sm:gap-3 bg-white hover:bg-gray-50 px-8 sm:px-12 py-4 sm:py-5 rounded-xl sm:rounded-2xl font-bold text-base sm:text-lg transition-all transform hover:scale-105 shadow-2xl font-nunito group touch-manipulation"
+              style={{ color: '#228B22' }}
             >
-              {t('finalCta.joinButton')}
-            </Link>
-            {/* Business CTA */}
-            <Link 
-              to="/dashboard"
-              className="bg-transparent hover:bg-white/10 text-white border-2 border-white px-10 py-5 rounded-2xl font-bold text-lg transition-all transform hover:scale-105 flex items-center justify-center gap-3 font-nunito"
-            >
-              {t('finalCta.businessButton')}
-            </Link>
+              <span className="group-hover:scale-110 transition-transform">📧</span>
+              <span>{t('waitlist.button')}</span>
+            </a>
           </div>
         </div>
       </section>
 
-      {/* Floating QR Button */}
-      <div className="fixed bottom-8 right-8 z-50">
-        <button 
-          onClick={() => navigate('/search')}
-          className="bg-emerald-500 hover:bg-emerald-600 text-white p-5 rounded-full shadow-2xl hover:shadow-3xl transition-all transform hover:scale-110 group"
-        >
-          <div className="w-12 h-12 flex items-center justify-center">
-            <span className="text-3xl group-hover:scale-110 transition-transform">📱</span>
-          </div>
-        </button>
-      </div>
-
-      {/* Custom Styles */}
-      <style jsx>{`
-        .radar-ring {
-          position: absolute;
-          border: 2px solid rgba(34, 197, 94, 0.3);
-          border-radius: 50%;
-          width: 300px;
-          height: 300px;
-          animation: radar-pulse 3s infinite;
-        }
-        
-        .delay-1000 {
-          animation-delay: 1s;
-        }
-        
-        .delay-2000 {
-          animation-delay: 2s;
-        }
-        
-        .delay-500 {
-          animation-delay: 0.5s;
-        }
-        
-        @keyframes radar-pulse {
-          0% {
-            transform: scale(0.5);
-            opacity: 1;
-          }
-          100% {
-            transform: scale(2);
-            opacity: 0;
-          }
-        }
-      `}</style>
     </div>
   )
 }

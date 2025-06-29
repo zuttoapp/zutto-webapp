@@ -1,11 +1,8 @@
 import { BrowserRouter as Router, Routes, Route, useLocation } from 'react-router-dom'
 import { AnimatePresence, motion } from 'framer-motion'
 import './i18n' // Initialize i18n
+import { AuthProvider } from './contexts/AuthContext'
 import LandingPage from './pages/LandingPage'
-import SearchPage from './pages/SearchPage'
-import BusinessProfilePage from './pages/BusinessProfilePage'
-import LoginPage from './pages/LoginPage'
-import DashboardPage from './pages/DashboardPage'
 import './App.css'
 
 // Simple, subtle page transition
@@ -58,38 +55,6 @@ function AnimatedRoutes() {
             </AnimatedPage>
           } 
         />
-        <Route 
-          path="/search" 
-          element={
-            <AnimatedPage>
-              <SearchPage />
-            </AnimatedPage>
-          } 
-        />
-        <Route 
-          path="/business/:id" 
-          element={
-            <AnimatedPage>
-              <BusinessProfilePage />
-            </AnimatedPage>
-          } 
-        />
-        <Route 
-          path="/login" 
-          element={
-            <AnimatedPage>
-              <LoginPage />
-            </AnimatedPage>
-          } 
-        />
-        <Route 
-          path="/dashboard" 
-          element={
-            <AnimatedPage>
-              <DashboardPage />
-            </AnimatedPage>
-          } 
-        />
       </Routes>
     </AnimatePresence>
   )
@@ -98,9 +63,9 @@ function AnimatedRoutes() {
 function App() {
   return (
     <Router>
-      <div className="relative">
+      <AuthProvider>
         <AnimatedRoutes />
-      </div>
+      </AuthProvider>
     </Router>
   )
 }

@@ -1,4 +1,4 @@
-# 🌟 Zutto - Discover Local Magic
+# 🌟 Zutto - Gamify your local experience
 
 A modern React web application that connects people with authentic local experiences in Puerto Rico. Zutto helps users discover hidden gems, support local businesses, and build meaningful community connections.
 

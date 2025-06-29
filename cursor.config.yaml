@@ -1,0 +1,124 @@
+# Cursor configuration file
+# This file contains rules and settings for the Cursor IDE
+
+# Editor settings
+editor:
+  tabSize: 2
+  insertSpaces: true
+  formatOnSave: true
+  wordWrap: "on"
+  defaultFormatter: "prettier"
+  formatOnPaste: true
+  formatOnType: true
+  minimap:
+    enabled: true
+    maxColumn: 120
+
+# File associations
+files:
+  associations:
+    "*.js": "javascript"
+    "*.jsx": "javascriptreact"
+    "*.ts": "typescript"
+    "*.tsx": "typescriptreact"
+    "*.json": "json"
+    "*.css": "css"
+    "*.scss": "scss"
+    "*.html": "html"
+    "*.svg": "svg"
+  exclude:
+    - "**/node_modules/**"
+    - "**/dist/**"
+    - "**/build/**"
+    - "**/.git/**"
+    - "**/coverage/**"
+    - "**/.next/**"
+    - "**/.vscode/**"
+
+# Search settings
+search:
+  exclude:
+    - "node_modules"
+    - "dist"
+    - "build"
+    - ".git"
+    - "coverage"
+    - ".next"
+    - ".vscode"
+  include:
+    - "src/**/*.{js,jsx,ts,tsx}"
+    - "public/**/*"
+    - "components/**/*"
+    - "styles/**/*"
+
+# AI settings
+ai:
+  model: "claude-3-sonnet"
+  temperature: 0.7
+  maxTokens: 4000
+  contextLines: 100
+  enableCodeCompletion: true
+  enableInlineSuggestions: true
+
+# Git settings
+git:
+  enableSmartCommit: true
+  confirmSync: true
+  enableCommitSigning: true
+  autoFetch: true
+  autoPush: true
+  branchProtection: true
+
+# Terminal settings
+terminal:
+  shell: "powershell"
+  fontFamily: "Cascadia Code"
+  fontSize: 14
+  integrated:
+    defaultProfile: "PowerShell"
+    profiles:
+      PowerShell:
+        path: "powershell.exe"
+        args: ["-NoLogo"]
+      GitBash:
+        path: "C:\\Program Files\\Git\\bin\\bash.exe"
+
+# Project-specific settings
+project:
+  name: "zutto-webapp"
+  type: "react"
+  frameworks:
+    - "react"
+    - "tailwindcss"
+    - "framer-motion"
+  features:
+    - "map-integration"
+    - "authentication"
+    - "check-in-system"
+    - "gamification"
+    - "business-listing"
+  linting:
+    eslint:
+      enabled: true
+      configFile: ".eslintrc.js"
+    prettier:
+      enabled: true
+      configFile: ".prettierrc"
+  testing:
+    framework: "jest"
+    coverage: true
+    watchMode: true
+
+# Performance settings
+performance:
+  maxFileSize: 5242880  # 5MB
+  maxFiles: 10000
+  maxMemory: 4096  # 4GB
+  enableLargeFileOptimization: true
+
+# Security settings
+security:
+  enableContentSecurityPolicy: true
+  enableStrictSSL: true
+  enableSecureCookies: true
+  enableXSSProtection: true 

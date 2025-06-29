@@ -8,21 +8,14 @@ const resources = {
       // Navigation
       nav: {
         explore: "Explore",
-        forBusinesses: "For Businesses",
-        about: "About",
-        signIn: "Sign In",
-        dashboard: "Dashboard",
-        logout: "Logout"
       },
       // Hero Section
       hero: {
-        statusBadge: "✨ Live in Puerto Rico",
-        headline: "Discover Local",
-        headlineAccent: "Magic",
-        subtext: "Connect with real places.",
-        subtextAccent: "No algorithms, just real people.",
-        exploreButton: "🔍 Explore Nearby Experiences",
-        scanButton: "📍 Scan to Check In"
+        statusBadge: "Soon in Puerto Rico",
+        headline: "Gamify Your Local Experience!",
+        subtext: "🌟 Discover. Play. Earn. Support local businesses with every visit.",
+        exploreButton: "Explore Nearby Experiences",
+        scanButton: "Scan to Check In"
       },
       // Experience Categories
       categories: {
@@ -41,19 +34,19 @@ const resources = {
       },
       // How it Works
       howItWorks: {
-        title: "The Zutto Loop",
-        subtitle: "Simple. Authentic. Meaningful.",
+        title: "How Zutto Works",
+        subtitle: "Discover local gems, check in when you visit, and earn points to unlock fun rewards.",
         step1: {
-          title: "You find something",
-          description: "Discover hidden gems and local experiences that match your vibe"
+          title: "Discover Local Spots",
+          description: "Open the Zutto app to explore nearby local businesses participating in the rewards program."
         },
         step2: {
-          title: "You check in",
-          description: "Connect with the business and show your support with a simple scan"
+          title: "Check In",
+          description: "When you visit, just tap \"Check In\" to confirm you're there — it only takes a second."
         },
         step3: {
-          title: "They keep working",
-          description: "Help local creators continue doing what they love most"
+          title: "Earn Points & Perks",
+          description: "Rack up points with each check-in and unlock exclusive rewards, offers, and surprises."
         }
       },
       // Live Activity
@@ -110,9 +103,25 @@ const resources = {
       // Final CTA
       finalCta: {
         title: "Ready to Connect?",
-        subtitle: "Join thousands discovering authentic local experiences every day",
+        subtitle: "Be among the first to discover authentic local experiences with Zutto.",
         joinButton: "🚀 Join the community",
         businessButton: "💼 Get Discovered Without the Stress"
+      },
+      // Early Access
+      earlyAccess: {
+        title: "🚀 Zutto is in early access",
+        description: "We're starting with check-ins to make supporting local spots fun and effortless. New features are coming soon,  get in early and help shape the future!"
+      },
+      // What is Zutto
+      whatIsZutto: {
+        title: "What is Zutto?",
+        description: "Zutto is a local discovery app that rewards you for showing up. Just check in at your favorite local spots — from coffee shops to galleries — and earn points you can use for exclusive perks. No receipts, no hassle — just support local and get rewarded."
+      },
+      // Waitlist
+      waitlist: {
+        title: "Want early access?",
+        description: "Join our early community and be the first to know when Zutto launches in your area.",
+        button: "Join the Waitlist"
       }
     }
   },
@@ -121,111 +130,52 @@ const resources = {
       // Navigation
       nav: {
         explore: "Explorar",
-        forBusinesses: "Para Negocios",
-        about: "Acerca de",
-        signIn: "Iniciar Sesión",
-        dashboard: "Panel",
-        logout: "Cerrar Sesión"
       },
       // Hero Section
       hero: {
-        statusBadge: "✨ En vivo en Puerto Rico",
-        headline: "Descubre la",
-        headlineAccent: "Magia Local",
-        subtext: "Conecta con lugares reales.",
-        subtextAccent: "Sin algoritmos, solo personas reales.",
-        exploreButton: "🔍 Explorar Experiencias Cercanas",
-        scanButton: "📍 Escanear para Registrarse"
-      },
-      // Experience Categories
-      categories: {
-        music: {
-          title: "Música en Vivo Esta Noche",
-          description: "3 lugares cerca de ti"
-        },
-        coffee: {
-          title: "Cafeterías Acogedoras",
-          description: "Perfectas para trabajar"
-        },
-        art: {
-          title: "Estudios de Arte Locales",
-          description: "Apoya a los creadores"
-        }
+        statusBadge: "Pronto en Puerto Rico",
+        headline: "¡Gamifica tu Experiencia Local!",
+        subtext: "🌟 Descubre. Juega. Gana. Apoya negocios locales con cada visita.",
+        exploreButton: "Explorar Experiencias Cercanas",
+        scanButton: "Escanear para Registrarse"
       },
       // How it Works
       howItWorks: {
-        title: "El Ciclo Zutto",
-        subtitle: "Simple. Auténtico. Significativo.",
+        title: "Cómo Funciona Zutto",
+        subtitle: "Descubre joyas locales, regístrate cuando visites, y gana puntos para desbloquear recompensas divertidas.",
         step1: {
-          title: "Encuentras algo",
-          description: "Descubre joyas ocultas y experiencias locales que coincidan con tu vibra"
+          title: "Descubre Lugares Locales",
+          description: "Abre la app de Zutto para explorar negocios locales cercanos que participan en el programa de recompensas."
         },
         step2: {
-          title: "Te registras",
-          description: "Conecta con el negocio y muestra tu apoyo con un simple escaneo"
+          title: "Regístrate",
+          description: "Cuando visites, solo toca \"Registrarse\" para confirmar que estás ahí — solo toma un segundo."
         },
         step3: {
-          title: "Ellos siguen trabajando",
-          description: "Ayuda a los creadores locales a continuar haciendo lo que más aman"
+          title: "Gana Puntos y Beneficios",
+          description: "Acumula puntos con cada registro y desbloquea recompensas exclusivas, ofertas, y sorpresas."
         }
       },
-      // Live Activity
-      liveActivity: {
-        badge: "En Vivo Ahora",
-        title: "Vivo Ahora",
-        subtitle: "Actividad real sucediendo en tu comunidad",
-        checkedIn: "personas se acaban de registrar",
-        featured: "Destacado hoy",
-        newAddition: "Nueva adición",
-        trending: "Tendencia"
-      },
-      // Browse by Mood
-      mood: {
-        title: "Quiero...",
-        subtitle: "Encuentra experiencias que coincidan con tu estado de ánimo",
-        music: {
-          title: "Escuchar música en vivo",
-          description: "Encuentra lugares con presentaciones en vivo"
-        },
-        cafe: {
-          title: "Encontrar una cafetería tranquila",
-          description: "Lugares perfectos para trabajar o leer"
-        },
-        relax: {
-          title: "Relajarme y descansar",
-          description: "Espacios pacíficos para desconectar"
-        },
-        shopping: {
-          title: "Apoyar a un creador local",
-          description: "Descubre tesoros hechos a mano"
-        }
-      },
-      // Testimonials
-      testimonials: {
-        title: "Por Qué la Gente Ama Zutto",
-        subtitle: "Historias reales de nuestra comunidad",
-        maria: {
-          text: "¡Finalmente encontré mi cafetería favorita a través de Zutto! El dueño recordó mi orden después de solo dos visitas. Esto es lo que se siente la comunidad.",
-          name: "María Santos",
-          role: "Exploradora Local"
-        },
-        carlos: {
-          text: "Zutto trajo muchas caras nuevas a nuestro estudio. La gente realmente se preocupa por lo que estamos creando aquí. No es solo tráfico peatonal—es conexión.",
-          name: "Carlos Rivera",
-          role: "Dueño de Estudio de Cerámica"
-        },
-        ana: {
-          text: "Como músico, Zutto me ayuda a conectar con personas que realmente aprecian la música en vivo. Cada show se siente más íntimo y significativo.",
-          name: "Ana Delgado",
-          role: "Músico Local"
-        }
+      // Early Access
+      earlyAccess: {
+        title: "🚀 Zutto está empezando",
+        description: "Ya arrancamos con check-ins para que apoyar lo local sea fácil y divertido.  Vienen cosas nuevas, ¡Únete ahora y ayúdanos a crear esta experiencia juntos!"
       },
       // Final CTA
       finalCta: {
         title: "¿Listo para Conectar?",
-        subtitle: "Únete a miles descubriendo experiencias locales auténticas cada día",
-        joinButton: "🚀 Únete a la comunidad",
-        businessButton: "💼 Sé Descubierto Sin el Estrés"
+        subtitle: "Sé de los primeros en descubrir experiencias locales auténticas con Zutto."
+      },
+      // What is Zutto
+      whatIsZutto: {
+        title: "¿Qué es Zutto?",
+        description: "Zutto es una aplicación de descubrimiento local que te recompensa por aparecer. Solo regístrate en tu lugar favorito local — de cafeterías a galerías — y gana puntos que puedes usar para perfiles exclusivos. Sin recibos, sin problemas — solo apoya local y consigue recompensado."
+      },
+      // Waitlist
+      waitlist: {
+        title: "¿Quieres acceso temprano?",
+        description: "Únete a nuestra comunidad temprana y se el primero en saber cuándo Zutto se lanza en tu área.",
+        button: "Únete a la lista de espera"
       }
     }
   }
