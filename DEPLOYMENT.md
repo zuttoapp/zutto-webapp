@@ -88,6 +88,19 @@ https://YOUR_USERNAME.github.io/zutto-webapp
    - Check that all dependencies are properly installed
    - Ensure Node.js version compatibility (18+ recommended)
 
+4. **MIME Type Error (text/jsx)**
+   - **CAUSE**: You're accessing the development server instead of the built version
+   - **SOLUTION**: 
+     - Make sure you're accessing `https://zuttoapp.github.io/zutto-webapp` (not localhost)
+     - Check that GitHub Pages is enabled in repository settings
+     - Verify the deployment completed in the Actions tab
+     - Wait 2-3 minutes after pushing for deployment to complete
+
+5. **Blank page**
+   - Check browser console for JavaScript errors
+   - Ensure all assets are loading correctly
+   - Verify the base path matches your repository name exactly
+
 ### Video Files Consideration
 
 ⚠️ **Important**: Your current build includes large video files (14MB+). GitHub Pages has some limitations:
@@ -123,6 +136,7 @@ If you encounter issues:
 1. Check the **Actions** tab in your GitHub repository for build logs
 2. Ensure your repository is public (or you have GitHub Pro for private repos)
 3. Verify the base path matches your repository name exactly
+4. **For MIME type errors**: Make sure you're accessing the deployed URL, not localhost
 
 ---
 
