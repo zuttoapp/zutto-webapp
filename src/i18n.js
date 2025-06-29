@@ -8,15 +8,10 @@ const resources = {
       // Navigation
       nav: {
         explore: "Explore",
-        forBusinesses: "For Businesses",
-        about: "About",
-        signIn: "Sign In",
-        dashboard: "Dashboard",
-        logout: "Logout"
       },
       // Hero Section
       hero: {
-        statusBadge: "Committing to Puerto Rico",
+        statusBadge: "Soon in Puerto Rico",
         headline: "Gamify Your Local Experience!",
         subtext: "🌟 Discover. Play. Earn. Support local businesses with every visit.",
         exploreButton: "Explore Nearby Experiences",
@@ -108,14 +103,14 @@ const resources = {
       // Final CTA
       finalCta: {
         title: "Ready to Connect?",
-        subtitle: "Join thousands discovering authentic local experiences every day",
+        subtitle: "Be among the first to discover authentic local experiences with Zutto.",
         joinButton: "🚀 Join the community",
         businessButton: "💼 Get Discovered Without the Stress"
       },
       // Early Access
       earlyAccess: {
         title: "🚀 Zutto is in early access",
-        description: "We're starting with check-ins to make supporting local spots fun and effortless. New features are coming soon — get in early and help shape the future!"
+        description: "We're starting with check-ins to make supporting local spots fun and effortless. New features are coming soon,  get in early and help shape the future!"
       },
       // What is Zutto
       whatIsZutto: {
@@ -135,34 +130,14 @@ const resources = {
       // Navigation
       nav: {
         explore: "Explorar",
-        forBusinesses: "Para Negocios",
-        about: "Acerca de",
-        signIn: "Iniciar Sesión",
-        dashboard: "Panel",
-        logout: "Cerrar Sesión"
       },
       // Hero Section
       hero: {
-        statusBadge: "Pronto con Puerto Rico",
+        statusBadge: "Pronto en Puerto Rico",
         headline: "¡Gamifica tu Experiencia Local!",
         subtext: "🌟 Descubre. Juega. Gana. Apoya negocios locales con cada visita.",
         exploreButton: "Explorar Experiencias Cercanas",
         scanButton: "Escanear para Registrarse"
-      },
-      // Experience Categories
-      categories: {
-        music: {
-          title: "Música en Vivo Esta Noche",
-          description: "3 lugares cerca de ti"
-        },
-        coffee: {
-          title: "Cafeterías Acogedoras",
-          description: "Perfectas para trabajar"
-        },
-        art: {
-          title: "Estudios de Arte Locales",
-          description: "Apoya a los creadores"
-        }
       },
       // How it Works
       howItWorks: {
@@ -181,68 +156,15 @@ const resources = {
           description: "Acumula puntos con cada registro y desbloquea recompensas exclusivas, ofertas, y sorpresas."
         }
       },
-      // Live Activity
-      liveActivity: {
-        badge: "En Vivo Ahora",
-        title: "Vivo Ahora",
-        subtitle: "Actividad real sucediendo en tu comunidad",
-        checkedIn: "personas se acaban de registrar",
-        featured: "Destacado hoy",
-        newAddition: "Nueva adición",
-        trending: "Tendencia"
-      },
-      // Browse by Mood
-      mood: {
-        title: "Quiero...",
-        subtitle: "Encontrar experiencias que coincidan con tu estado de ánimo",
-        music: {
-          title: "Escuchar música en vivo",
-          description: "Encuentra lugares con presentaciones en vivo"
-        },
-        cafe: {
-          title: "Encontrar una cafetería tranquila",
-          description: "Lugares perfectos para trabajar o leer"
-        },
-        relax: {
-          title: "Relajarme y descansar",
-          description: "Espacios pacíficos para desconectar"
-        },
-        shopping: {
-          title: "Apoyar a un creador local",
-          description: "Descubre tesoros hechos a mano"
-        }
-      },
-      // Testimonials
-      testimonials: {
-        title: "Por Qué la Gente Ama Zutto",
-        subtitle: "Historias reales de nuestra comunidad",
-        maria: {
-          text: "¡Finalmente encontré mi cafetería favorita a través de Zutto! El dueño recordó mi orden después de solo dos visitas. Esto es lo que se siente la comunidad.",
-          name: "María Santos",
-          role: "Exploradora Local"
-        },
-        carlos: {
-          text: "Zutto trajo muchas caras nuevas a nuestro estudio. La gente realmente se preocupa por lo que estamos creando aquí. No es solo tráfico peatonal—es conexión.",
-          name: "Carlos Rivera",
-          role: "Dueño de Estudio de Cerámica"
-        },
-        ana: {
-          text: "Como músico, Zutto me ayuda a conectar con personas que realmente aprecian la música en vivo. Cada show se siente más íntimo y significativo.",
-          name: "Ana Delgado",
-          role: "Músico Local"
-        }
+      // Early Access
+      earlyAccess: {
+        title: "🚀 Zutto está empezando",
+        description: "Ya arrancamos con check-ins para que apoyar lo local sea fácil y divertido.  Vienen cosas nuevas, ¡Únete ahora y ayúdanos a crear esta experiencia juntos!"
       },
       // Final CTA
       finalCta: {
         title: "¿Listo para Conectar?",
-        subtitle: "Únete a miles descubriendo experiencias locales auténticas cada día",
-        joinButton: "🚀 Únete a la comunidad",
-        businessButton: "💼 Sé Descubierto Sin el Estrés"
-      },
-      // Early Access
-      earlyAccess: {
-        title: "🚀 Zutto está en acceso temprano",
-        description: "Estamos comenzando con check-ins para hacer que apoyar lugares locales sea divertido y sin esfuerzo. ¡Nuevas características están por venir — ¡únete pronto y ayúdanos a formar el futuro!"
+        subtitle: "Sé de los primeros en descubrir experiencias locales auténticas con Zutto."
       },
       // What is Zutto
       whatIsZutto: {

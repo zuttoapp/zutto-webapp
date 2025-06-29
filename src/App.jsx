@@ -2,14 +2,7 @@ import { BrowserRouter as Router, Routes, Route, useLocation } from 'react-route
 import { AnimatePresence, motion } from 'framer-motion'
 import './i18n' // Initialize i18n
 import { AuthProvider } from './contexts/AuthContext'
-import ProtectedRoute from './components/ProtectedRoute'
 import LandingPage from './pages/LandingPage'
-import SearchPage from './pages/SearchPage'
-import BusinessProfilePage from './pages/BusinessProfilePage'
-import LoginPage from './pages/LoginPage'
-import UserProfilePage from './pages/UserProfilePage'
-import Dashboard from './pages/Dashboard'
-import AboutPage from './pages/AboutPage'
 import './App.css'
 
 // Simple, subtle page transition
@@ -54,53 +47,12 @@ function AnimatedRoutes() {
   return (
     <AnimatePresence mode="wait" initial={false}>
       <Routes location={location} key={location.pathname}>
-        {/* Public Routes */}
         <Route 
           path="/" 
           element={
             <AnimatedPage>
               <LandingPage />
             </AnimatedPage>
-          } 
-        />
-        <Route 
-          path="/about" 
-          element={
-            <AnimatedPage>
-              <AboutPage />
-            </AnimatedPage>
-          } 
-        />
-
-        {/* Protected Routes */}
-        <Route 
-          path="/profile" 
-          element={
-            <ProtectedRoute>
-              <AnimatedPage>
-                <UserProfilePage />
-              </AnimatedPage>
-            </ProtectedRoute>
-          } 
-        />
-        <Route 
-          path="/business-profile" 
-          element={
-            <ProtectedRoute>
-              <AnimatedPage>
-                <BusinessProfilePage />
-              </AnimatedPage>
-            </ProtectedRoute>
-          } 
-        />
-        <Route 
-          path="/dashboard" 
-          element={
-            <ProtectedRoute>
-              <AnimatedPage>
-                <Dashboard />
-              </AnimatedPage>
-            </ProtectedRoute>
           } 
         />
       </Routes>
