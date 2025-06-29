@@ -2,9 +2,9 @@ name: Deploy to GitHub Pages
 
 on:
   push:
-    branches: [ v0.1 ]  # Changed from main to v0.1
+    branches: [ main ]  # Changed back to main
   pull_request:
-    branches: [ v0.1 ]
+    branches: [ main ]
 
 jobs:
   build-and-deploy:
