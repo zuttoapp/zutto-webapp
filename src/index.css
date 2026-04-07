@@ -22,7 +22,11 @@
 }
 
 html {
-  font-family: 'Nunito', system-ui, -apple-system, sans-serif;
+  font-family:
+    'Nunito',
+    system-ui,
+    -apple-system,
+    sans-serif;
   line-height: 1.5;
   font-weight: 400;
   -webkit-font-smoothing: antialiased;
@@ -32,8 +36,8 @@ html {
 body {
   margin: 0;
   min-height: 100vh;
-  background-color: #ffffff;
-  color: #1f2937;
+  background-color: var(--zutto-bg, #ffffff);
+  color: var(--zutto-text, #1a1a1a);
   overflow-x: hidden; /* Prevent horizontal scroll during transitions */
 }
 
@@ -81,8 +85,12 @@ a {
 }
 
 @keyframes spin {
-  0% { transform: rotate(0deg); }
-  100% { transform: rotate(360deg); }
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
 }
 
 /* Smooth transitions for all interactive elements */
@@ -93,7 +101,7 @@ a {
 /* Enhanced focus states for accessibility */
 button:focus-visible,
 a:focus-visible {
-  outline: 2px solid #10b981;
+  outline: 2px solid var(--zutto-green-primary, #228b22);
   outline-offset: 2px;
   border-radius: 4px;
 }
@@ -105,70 +113,71 @@ a:focus-visible {
   min-height: 100vh;
 }
 
-  /* Landing Page Custom Styles */
-  
-  /* Hero Video Background - Accessibility Support */
-  @media (prefers-reduced-motion: reduce) {
-    .hero-video {
-      display: none !important;
-    }
-    .hero-image {
-      display: block !important;
-    }
-  }
-  
-  /* Optimize single video with source switching */
+/* Landing Page Custom Styles */
+
+/* Hero Video Background - Accessibility Support */
+@media (prefers-reduced-motion: reduce) {
   .hero-video {
-    will-change: opacity;
-    pointer-events: none; /* Videos don't interfere with interactions */
+    display: none !important;
   }
-  
-  /* Smooth video source transitions */
-  .hero-video {
-    transition: opacity 500ms ease-in-out;
-  }
-  
-  /* Subtle parallax effect - reduced for multiple videos */
   .hero-image {
-    animation: heroFloat 20s ease-in-out infinite;
+    display: block !important;
   }
-  
-  @keyframes heroFloat {
-    0%, 100% {
-      transform: scale(1) translateY(0);
-    }
-    50% {
-      transform: scale(1.01) translateY(-3px);
-    }
+}
+
+/* Optimize single video with source switching */
+.hero-video {
+  will-change: opacity;
+  pointer-events: none; /* Videos don't interfere with interactions */
+}
+
+/* Smooth video source transitions */
+.hero-video {
+  transition: opacity 500ms ease-in-out;
+}
+
+/* Subtle parallax effect - reduced for multiple videos */
+.hero-image {
+  animation: heroFloat 20s ease-in-out infinite;
+}
+
+@keyframes heroFloat {
+  0%,
+  100% {
+    transform: scale(1) translateY(0);
   }
-  
-  @media (max-width: 768px) {
-    .hero-video {
-      display: none !important; /* Hide video on mobile to save data */
-    }
-    
-    /* Mobile users see static image only */
-    .hero-video,
-    .hero-image {
-      animation: none;
-    }
+  50% {
+    transform: scale(1.01) translateY(-3px);
   }
-  
-  /* Connection quality optimization */
-  @media (prefers-reduced-data: reduce) {
-    .hero-video {
-      display: none !important;
-    }
+}
+
+@media (max-width: 768px) {
+  .hero-video {
+    display: none !important; /* Hide video on mobile to save data */
   }
 
-  .radar-ring {
-    position: absolute;
-    border: 2px solid rgba(34, 197, 94, 0.3);
-    border-radius: 50%;
-    width: 300px;
-    height: 300px;
-    animation: radar-pulse 3s infinite;
+  /* Mobile users see static image only */
+  .hero-video,
+  .hero-image {
+    animation: none;
   }
+}
+
+/* Connection quality optimization */
+@media (prefers-reduced-data: reduce) {
+  .hero-video {
+    display: none !important;
+  }
+}
+
+.radar-ring {
+  position: absolute;
+  border: 2px solid rgba(34, 197, 94, 0.3);
+  border-radius: 50%;
+  width: 300px;
+  height: 300px;
+  animation: radar-pulse 3s infinite;
+}
 
 .delay-1000 {
   animation-delay: 1s;
@@ -212,12 +221,36 @@ a:focus-visible {
   animation: float 20s infinite linear;
 }
 
-.particle-1 { top: 20%; left: 10%; animation-delay: 0s; }
-.particle-2 { top: 40%; left: 80%; animation-delay: -5s; }
-.particle-3 { top: 60%; left: 30%; animation-delay: -10s; }
-.particle-4 { top: 80%; left: 70%; animation-delay: -15s; }
-.particle-5 { top: 30%; left: 50%; animation-delay: -8s; }
-.particle-6 { top: 70%; left: 20%; animation-delay: -12s; }
+.particle-1 {
+  top: 20%;
+  left: 10%;
+  animation-delay: 0s;
+}
+.particle-2 {
+  top: 40%;
+  left: 80%;
+  animation-delay: -5s;
+}
+.particle-3 {
+  top: 60%;
+  left: 30%;
+  animation-delay: -10s;
+}
+.particle-4 {
+  top: 80%;
+  left: 70%;
+  animation-delay: -15s;
+}
+.particle-5 {
+  top: 30%;
+  left: 50%;
+  animation-delay: -8s;
+}
+.particle-6 {
+  top: 70%;
+  left: 20%;
+  animation-delay: -12s;
+}
 
 @keyframes float {
   0% {
@@ -253,14 +286,35 @@ a:focus-visible {
   animation: pulse-dot 4s infinite ease-in-out;
 }
 
-.grid-dot-1 { top: 25%; left: 15%; animation-delay: 0s; }
-.grid-dot-2 { top: 45%; left: 85%; animation-delay: 1s; }
-.grid-dot-3 { top: 65%; left: 25%; animation-delay: 2s; }
-.grid-dot-4 { top: 35%; left: 65%; animation-delay: 3s; }
-.grid-dot-5 { top: 75%; left: 75%; animation-delay: 1.5s; }
+.grid-dot-1 {
+  top: 25%;
+  left: 15%;
+  animation-delay: 0s;
+}
+.grid-dot-2 {
+  top: 45%;
+  left: 85%;
+  animation-delay: 1s;
+}
+.grid-dot-3 {
+  top: 65%;
+  left: 25%;
+  animation-delay: 2s;
+}
+.grid-dot-4 {
+  top: 35%;
+  left: 65%;
+  animation-delay: 3s;
+}
+.grid-dot-5 {
+  top: 75%;
+  left: 75%;
+  animation-delay: 1.5s;
+}
 
 @keyframes pulse-dot {
-  0%, 100% {
+  0%,
+  100% {
     opacity: 0.2;
     transform: scale(1);
   }
@@ -313,7 +367,8 @@ a:focus-visible {
 }
 
 @keyframes mesh-float {
-  0%, 100% {
+  0%,
+  100% {
     transform: translateY(0px) rotate(0deg);
   }
   33% {

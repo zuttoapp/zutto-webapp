@@ -1,33 +1,27 @@
-import { BrowserRouter as Router, Routes, Route, useLocation } from 'react-router-dom'
-import { AnimatePresence, motion } from 'framer-motion'
-import './i18n' // Initialize i18n
-import { AuthProvider } from './contexts/AuthContext'
-import LandingPage from './pages/LandingPage'
-import './App.css'
+import { BrowserRouter as Router, Routes, Route, useLocation, Navigate } from 'react-router-dom';
+import { AnimatePresence, motion } from 'framer-motion';
+import '@/i18n';
+import { AuthProvider } from '@/contexts/auth-context';
+import LandingPage from '@/pages/landing-page';
+import '@/app.css';
 
-// Simple, subtle page transition
+const Motion = motion;
+
 const pageVariants = {
-  initial: {
-    opacity: 0
-  },
-  in: {
-    opacity: 1
-  },
-  out: {
-    opacity: 0
-  }
-}
+  initial: { opacity: 0 },
+  in: { opacity: 1 },
+  out: { opacity: 0 },
+};
 
 const pageTransition = {
   type: 'tween',
   ease: 'easeInOut',
-  duration: 0.2
-}
+  duration: 0.2,
+};
 
-// Simple animated page wrapper
 function AnimatedPage({ children }) {
   return (
-    <motion.div
+    <Motion.div
       initial="initial"
       animate="in"
       exit="out"
@@ -36,28 +30,28 @@ function AnimatedPage({ children }) {
       className="w-full"
     >
       {children}
-    </motion.div>
-  )
+    </Motion.div>
+  );
 }
 
-// Routes component with location for AnimatePresence
 function AnimatedRoutes() {
-  const location = useLocation()
-  
+  const location = useLocation();
+
   return (
     <AnimatePresence mode="wait" initial={false}>
       <Routes location={location} key={location.pathname}>
-        <Route 
-          path="/" 
+        <Route
+          path="/"
           element={
             <AnimatedPage>
               <LandingPage />
             </AnimatedPage>
-          } 
+          }
         />
+        <Route path="*" element={<Navigate to="/" replace />} />
       </Routes>
     </AnimatePresence>
-  )
+  );
 }
 
 function App() {
@@ -67,7 +61,7 @@ function App() {
         <AnimatedRoutes />
       </AuthProvider>
     </Router>
-  )
+  );
 }
 
-export default App
+export default App;

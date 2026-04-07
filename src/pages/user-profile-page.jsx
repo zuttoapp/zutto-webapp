@@ -1,67 +1,63 @@
-import { useState } from 'react'
-import { useNavigate } from 'react-router-dom'
-import { useTranslation } from 'react-i18next'
-import { useAuth } from '../contexts/AuthContext'
-import Header from '../components/Header'
+import { useState } from 'react';
+import { useAuth } from '@/contexts/auth-context';
+import Header from '@/components/header';
 
 function UserProfilePage() {
-  const navigate = useNavigate()
-  const { t } = useTranslation()
-  const { user, updateProfile } = useAuth()
-  const [isEditing, setIsEditing] = useState(false)
+  const { user, updateProfile } = useAuth();
+  const [isEditing, setIsEditing] = useState(false);
   const [formData, setFormData] = useState({
     bio: user?.profile?.bio || '',
     location: user?.profile?.location || '',
-    interests: user?.profile?.interests || []
-  })
-  const [newInterest, setNewInterest] = useState('')
-  const [loading, setLoading] = useState(false)
-  const [error, setError] = useState('')
+    interests: user?.profile?.interests || [],
+  });
+  const [newInterest, setNewInterest] = useState('');
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState('');
 
   const handleInputChange = (e) => {
-    const { name, value } = e.target
-    setFormData(prev => ({
+    const { name, value } = e.target;
+    setFormData((prev) => ({
       ...prev,
-      [name]: value
-    }))
-  }
+      [name]: value,
+    }));
+  };
 
   const handleAddInterest = () => {
     if (newInterest.trim() && !formData.interests.includes(newInterest.trim())) {
-      setFormData(prev => ({
+      setFormData((prev) => ({
         ...prev,
-        interests: [...prev.interests, newInterest.trim()]
-      }))
-      setNewInterest('')
+        interests: [...prev.interests, newInterest.trim()],
+      }));
+      setNewInterest('');
     }
-  }
+  };
 
   const handleRemoveInterest = (interest) => {
-    setFormData(prev => ({
+    setFormData((prev) => ({
       ...prev,
-      interests: prev.interests.filter(i => i !== interest)
-    }))
-  }
+      interests: prev.interests.filter((i) => i !== interest),
+    }));
+  };
 
   const handleSubmit = async (e) => {
-    e.preventDefault()
-    setLoading(true)
-    setError('')
+    e.preventDefault();
+    setLoading(true);
+    setError('');
 
     try {
-      const result = await updateProfile(formData)
+      const result = await updateProfile(formData);
       if (result.success) {
-        setIsEditing(false)
+        setIsEditing(false);
       } else {
-        setError(result.error || 'Failed to update profile')
+        setError(result.error || 'Failed to update profile');
       }
     } catch (err) {
-      setError('An unexpected error occurred')
-      console.error(err)
+      setError('An unexpected error occurred');
+      console.error(err);
     } finally {
-      setLoading(false)
+      setLoading(false);
     }
-  }
+  };
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-emerald-50 via-purple-50 to-blue-50 font-nunito">
@@ -86,7 +82,9 @@ function UserProfilePage() {
             <div className="pt-20 pb-8 px-8">
               <div className="flex justify-between items-start">
                 <div>
-                  <h1 className="text-3xl font-bold text-gray-900 mb-2 font-nunito">{user?.name}</h1>
+                  <h1 className="text-3xl font-bold text-gray-900 mb-2 font-nunito">
+                    {user?.name}
+                  </h1>
                   <p className="text-gray-600 font-nunito">{user?.email}</p>
                 </div>
                 <button
@@ -112,7 +110,10 @@ function UserProfilePage() {
                   )}
 
                   <div>
-                    <label htmlFor="bio" className="block text-sm font-semibold text-gray-700 mb-2 font-nunito">
+                    <label
+                      htmlFor="bio"
+                      className="block text-sm font-semibold text-gray-700 mb-2 font-nunito"
+                    >
                       Bio
                     </label>
                     <textarea
@@ -127,7 +128,10 @@ function UserProfilePage() {
                   </div>
 
                   <div>
-                    <label htmlFor="location" className="block text-sm font-semibold text-gray-700 mb-2 font-nunito">
+                    <label
+                      htmlFor="location"
+                      className="block text-sm font-semibold text-gray-700 mb-2 font-nunito"
+                    >
                       Location
                     </label>
                     <input
@@ -196,12 +200,18 @@ function UserProfilePage() {
                   </div>
 
                   <div>
-                    <h3 className="text-lg font-semibold text-gray-900 mb-2 font-nunito">Location</h3>
-                    <p className="text-gray-600 font-nunito">{formData.location || 'No location set'}</p>
+                    <h3 className="text-lg font-semibold text-gray-900 mb-2 font-nunito">
+                      Location
+                    </h3>
+                    <p className="text-gray-600 font-nunito">
+                      {formData.location || 'No location set'}
+                    </p>
                   </div>
 
                   <div>
-                    <h3 className="text-lg font-semibold text-gray-900 mb-2 font-nunito">Interests</h3>
+                    <h3 className="text-lg font-semibold text-gray-900 mb-2 font-nunito">
+                      Interests
+                    </h3>
                     <div className="flex flex-wrap gap-2">
                       {formData.interests.length > 0 ? (
                         formData.interests.map((interest, index) => (
@@ -228,21 +238,29 @@ function UserProfilePage() {
                 <div className="space-y-4">
                   <div className="flex justify-between items-center">
                     <span className="text-gray-600 font-nunito">Check-ins</span>
-                    <span className="text-2xl font-bold text-emerald-600 font-nunito">{user?.profile?.checkIns || 0}</span>
+                    <span className="text-2xl font-bold text-emerald-600 font-nunito">
+                      {user?.profile?.checkIns || 0}
+                    </span>
                   </div>
                   <div className="flex justify-between items-center">
                     <span className="text-gray-600 font-nunito">Points</span>
-                    <span className="text-2xl font-bold text-emerald-600 font-nunito">{user?.profile?.points || 0}</span>
+                    <span className="text-2xl font-bold text-emerald-600 font-nunito">
+                      {user?.profile?.points || 0}
+                    </span>
                   </div>
                   <div className="flex justify-between items-center">
                     <span className="text-gray-600 font-nunito">Badges</span>
-                    <span className="text-2xl font-bold text-emerald-600 font-nunito">{user?.profile?.badges?.length || 0}</span>
+                    <span className="text-2xl font-bold text-emerald-600 font-nunito">
+                      {user?.profile?.badges?.length || 0}
+                    </span>
                   </div>
                 </div>
               </div>
 
               <div className="bg-white/80 backdrop-blur-sm rounded-3xl shadow-xl p-6 border border-white/40">
-                <h3 className="text-lg font-semibold text-gray-900 mb-4 font-nunito">Recent Activity</h3>
+                <h3 className="text-lg font-semibold text-gray-900 mb-4 font-nunito">
+                  Recent Activity
+                </h3>
                 <div className="space-y-4">
                   <p className="text-gray-600 font-nunito">No recent activity</p>
                 </div>
@@ -252,7 +270,7 @@ function UserProfilePage() {
         </div>
       </div>
     </div>
-  )
+  );
 }
 
-export default UserProfilePage 
+export default UserProfilePage;

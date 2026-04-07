@@ -1,0 +1,48 @@
+---
+description: Zutto webapp structure, naming, imports, and local agent overrides
+alwaysApply: true
+---
+
+# Zutto frontend — agent conventions
+
+## Project focus
+
+Vite + React app for **Zutto**: gamified local business discovery (Puerto Rico). Static deploy (e.g. GitHub Pages). Auth and API are mocked or separate; prefer clear boundaries for future API integration.
+
+## Directory layout (`src/`)
+
+| Area | Path | Purpose |
+|------|------|---------|
+| Entry | `main.jsx`, `app.jsx` | Bootstrap and root router |
+| Pages | `src/pages/*.jsx` | Route-level screens (kebab-case files) |
+| Components | `src/components/*` | Reusable UI (kebab-case files) |
+| Context | `src/contexts/*` | React context providers |
+| Assets | `src/assets/*` | Images, SVGs (kebab-case, no spaces) |
+| i18n | `src/i18n.js` | i18next bootstrap |
+| Locales | `src/locales/*.json` | Translation tokens (`en.json`, `es.json`, …) |
+| Styles | `src/index.css`, `src/app.css` | Global / app styles |
+
+## File naming
+
+- Use **kebab-case** for all source files: `landing-page.jsx`, `auth-context.jsx`, `venue-card.jsx`.
+- React **component names in code** stay **PascalCase** (`function LandingPage()` in `landing-page.jsx`).
+- Avoid spaces in filenames (e.g. logo: `zuttoapp-1000x1000-1.svg`).
+
+## Imports
+
+- Import from the app source tree **only** via the **`@/` alias** (maps to `src/`).
+
+  - Good: `import Header from '@/components/header'`
+  - Avoid: `import Header from '../components/header'`
+
+- External packages stay as usual: `react`, `react-router-dom`, `framer-motion`, etc.
+
+## Tooling
+
+- Quality gate: `npm test` / `pnpm run check` (lint, Prettier, `tsc`, build).
+- Optional dead-code check: `pnpm dlx knip`
+
+## Git and local-only agent notes
+
+- **Shared** rules for the team live in **this repo**: `.cursor/rules/*.mdc` and `AGENTS.md`.
+- **Personal / machine-specific** agent notes must **not** be committed. Use files listed in `.gitignore` (e.g. `AGENTS.local.md`, `.cursor/rules/local.mdc`) for private context.

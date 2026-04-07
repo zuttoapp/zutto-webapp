@@ -1,0 +1,173 @@
+{
+  "nav": {
+    "explore": "Explorar"
+  },
+  "hero": {
+    "statusBadge": "Próximamente · Puerto Rico",
+    "headline": "Convierte tu Experiencia local en un juego",
+    "subtext": "Descubre lugares únicos, regístrate, gana recompensas — y apoya los negocios locales que hacen grande a Puerto Rico.",
+    "cta": "Únete a la lista de espera",
+    "exploreButton": "Explorar Experiencias Cercanas",
+    "scanButton": "Escanear para Registrarse"
+  },
+  "whyZutto": {
+    "title": "¿Por qué Zutto?",
+    "subtitle": "Dos lados del mismo problema — y una plataforma que los resuelve.",
+    "userHeadline": "Para quienes quieren apoyar lo local",
+    "userDescription": "Sabes que los negocios locales importan, pero es difícil saber adónde ir, qué ofrecen y por qué vale la pena. El interés se desvanece. Los hábitos vuelven a lo conocido.",
+    "userPain": "El descubrimiento está roto para los consumidores.",
+    "businessHeadline": "Para negocios que merecen más clientes",
+    "businessDescription": "El 24% de las pequeñas empresas de Puerto Rico tienen dificultades para atraer y retener clientes, incluso cuando hacen todo bien. Son invisibles en un mundo dominado por grandes plataformas.",
+    "businessPain": "La visibilidad está rota para los negocios locales.",
+    "stat": "24%",
+    "statLabel": "de las PYMES de Puerto Rico tienen dificultades para atraer clientes",
+    "statSource": "Microsoft, 2024"
+  },
+  "howItWorks": {
+    "title": "Cómo Funciona Zutto",
+    "subtitle": "Tres pasos simples para explorar, ganar y apoyar lo local.",
+    "step1": {
+      "title": "Descubre",
+      "description": "Usa el Radar Zutto para encontrar exactamente lo que deseas — desde un café específico hasta una noche de música en vivo — cerca de ti, con precios y detalles."
+    },
+    "step2": {
+      "title": "Regístrate",
+      "description": "Escanea el código QR al llegar, gana puntos al instante y mantén tu racha. Cada visita cuenta."
+    },
+    "step3": {
+      "title": "Gana y Explora",
+      "description": "Completa retos, desbloquea recompensas y descubre nuevos favoritos locales — mientras ayudas a tu comunidad a prosperar."
+    }
+  },
+  "radarSpotlight": {
+    "eyebrow": "Radar Zutto",
+    "title": "Busca exactamente lo que quieres",
+    "description": "No solo \"café cerca\" — el Radar Zutto te permite buscar un matcha cold brew con leche de avena y te muestra qué cafetería local lo prepara, el precio, la distancia y cómo llegar.",
+    "example": "¿Quieres un matcha cold brew con leche de avena?",
+    "exampleResult": "El Radar Zutto lo encuentra.",
+    "benefit1": "Descubrimiento personalizado",
+    "benefit2": "Precios y detalles reales",
+    "benefit3": "Apoya lo local primero"
+  },
+  "challenges": {
+    "eyebrow": "Retos Zutto",
+    "title": "Convierte la exploración en un juego",
+    "subtitle": "Completa retos diarios y semanales para ganar puntos extra, desbloquear insignias y mantener viva tu aventura local.",
+    "example1": {
+      "icon": "🗺️",
+      "title": "Explorador",
+      "description": "Visita 3 lugares nuevos esta semana",
+      "points": "+150 pts",
+      "badge": "Semanal"
+    },
+    "example2": {
+      "icon": "🏛️",
+      "title": "Amante de la Historia",
+      "description": "Explora un sitio histórico este fin de semana",
+      "points": "+200 pts",
+      "badge": "Fin de semana"
+    },
+    "example3": {
+      "icon": "☕",
+      "title": "Paladar Aventurero",
+      "description": "Prueba algo nuevo en tu cafetería favorita",
+      "points": "+100 pts",
+      "badge": "Diario"
+    },
+    "example4": {
+      "icon": "🎵",
+      "title": "Noche de Salida",
+      "description": "Disfruta música en vivo en un local",
+      "points": "+175 pts",
+      "badge": "Fin de semana"
+    }
+  },
+  "businessDashboard": {
+    "eyebrow": "Para Dueños de Negocios",
+    "title": "Datos reales. Insights reales. Crecimiento real.",
+    "subtitle": "Deja de adivinar. Zutto te da la inteligencia del cliente que necesitas para tomar decisiones más inteligentes — sin anuncios pagados.",
+    "feature1": {
+      "icon": "👥",
+      "title": "Conoce a tus visitantes",
+      "description": "Ve quién te visita — clientes nuevos vs. habituales — y entiende qué los hace volver."
+    },
+    "feature2": {
+      "icon": "⏰",
+      "title": "Inteligencia en horas pico",
+      "description": "Sabe exactamente cuándo son tus horas pico y qué lleva a los clientes en esos momentos."
+    },
+    "feature3": {
+      "icon": "📊",
+      "title": "Seguimiento de productos y servicios",
+      "description": "Rastrea qué productos o servicios específicos generan más engagement y visitas repetidas."
+    },
+    "feature4": {
+      "icon": "🗺️",
+      "title": "Comportamiento más allá de tu local",
+      "description": "Entiende a dónde van tus clientes antes y después de visitarte — contexto completo del vecindario."
+    },
+    "feature5": {
+      "icon": "🏆",
+      "title": "Compite con datos, no con anuncios",
+      "description": "Nivela el campo de juego. Usa insights reales de clientes para superar a competidores más grandes sin grandes presupuestos."
+    }
+  },
+  "supportedBy": {
+    "eyebrow": "Validado por la Innovación",
+    "label": "Con el apoyo de",
+    "validationHeadline": "Construido a través de Fase 1",
+    "validationDescription": "Zutto fue desarrollado y validado a través de Fase1 Intensive — un programa de innovación e incubación del Fideicomiso para la Ciencia, la Tecnología y la Investigación de Puerto Rico. Nos enorgullece ser parte de la Cohorte Gen 4, 2025.",
+    "fase1Title": "Programa Fase 1",
+    "fase1LogoAlt": "Programa de emprendimiento Fase 1",
+    "fase1ProgramLine": "Cohorte Gen 4 (2025)",
+    "trustTitle": "Fideicomiso de Ciencia de Puerto Rico",
+    "trustLogoAlt": "Fideicomiso para la Ciencia, la Tecnología y la Investigación de Puerto Rico"
+  },
+  "finalCta": {
+    "title": "Sé parte del movimiento",
+    "subtitle": "Únete a la lista de espera y sé de los primeros en explorar Puerto Rico de una manera diferente — un registro a la vez.",
+    "joinButton": "🚀 Únete a la comunidad",
+    "businessButton": "💼 Sé descubierto sin el estrés"
+  },
+  "earlyAccess": {
+    "title": "🚀 Zutto llegará pronto",
+    "description": "Arrancamos con check-ins para que apoyar lo local sea fácil y divertido. Vienen cosas nuevas — ¡Únete ahora y ayúdanos a crear esta experiencia juntos!"
+  },
+  "waitlist": {
+    "title": "¿Quieres acceso temprano?",
+    "description": "Únete a nuestra comunidad temprana y sé el primero en saber cuándo Zutto se lanza en tu área.",
+    "button": "Únete a la lista de espera"
+  },
+  "theme": {
+    "switchToDark": "Cambiar a modo oscuro",
+    "switchToLight": "Cambiar a modo claro"
+  },
+  "landing": {
+    "theProblem": "El Problema",
+    "forUsers": "Para Exploradores",
+    "forBusinesses": "Para Negocios",
+    "simpleByDesign": "Simple por diseño",
+    "earlyAccess": "Acceso Anticipado",
+    "featuredInsight": "Datos Destacados",
+    "ctaNudge": "Gratis · Sin tarjeta de crédito",
+    "step1Label": "Paso 1",
+    "step2Label": "Paso 2",
+    "step3Label": "Paso 3",
+    "radarMoreOptions": "+ 4 opciones cercanas más",
+    "radarSearchNearMe": "cerca de mí",
+    "radarPlaceholder": "matcha cold brew leche de avena",
+    "radarWindowTitle": "Radar Zutto",
+    "radarPlace1Name": "Café Hacienda",
+    "radarPlace1Distance": "0.3 km",
+    "radarPlace1Price": "$6.50",
+    "radarPlace1Tag": "🌿 Especialista en matcha",
+    "radarPlace2Name": "La Taza Verde",
+    "radarPlace2Distance": "0.7 km",
+    "radarPlace2Price": "$5.75",
+    "radarPlace2Tag": "🥛 Leche de avena disponible"
+  },
+  "footer": {
+    "copyright": "© {{year}} Nytsu LLC. Todos los derechos reservados.",
+    "location": "Puerto Rico"
+  }
+}

@@ -1,16 +1,14 @@
-import { useState } from 'react'
-import { useNavigate, useLocation } from 'react-router-dom'
-import { useTranslation } from 'react-i18next'
-import { useAuth } from '../contexts/AuthContext'
-import Header from '../components/Header'
+import { useState } from 'react';
+import { useNavigate, useLocation } from 'react-router-dom';
+import { useAuth } from '@/contexts/auth-context';
+import Header from '@/components/header';
 
 function LoginPage() {
-  const navigate = useNavigate()
-  const location = useLocation()
-  const { t } = useTranslation()
-  const { login, signup } = useAuth()
-  const [isLogin, setIsLogin] = useState(true)
-  const [userType, setUserType] = useState('user') // 'user' or 'business'
+  const navigate = useNavigate();
+  const location = useLocation();
+  const { login, signup } = useAuth();
+  const [isLogin, setIsLogin] = useState(true);
+  const [userType, setUserType] = useState('user'); // 'user' or 'business'
   const [formData, setFormData] = useState({
     email: '',
     password: '',
@@ -19,21 +17,21 @@ function LoginPage() {
     description: '',
     category: '',
     address: '',
-    phone: ''
-  })
-  const [loading, setLoading] = useState(false)
-  const [error, setError] = useState('')
+    phone: '',
+  });
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState('');
 
   const handleInputChange = (e) => {
-    const { name, value } = e.target
-    setFormData(prev => ({
+    const { name, value } = e.target;
+    setFormData((prev) => ({
       ...prev,
-      [name]: value
-    }))
-  }
+      [name]: value,
+    }));
+  };
 
   const handleUserTypeChange = (type) => {
-    setUserType(type)
+    setUserType(type);
     setFormData({
       email: '',
       password: '',
@@ -42,50 +40,52 @@ function LoginPage() {
       description: '',
       category: '',
       address: '',
-      phone: ''
-    })
-  }
+      phone: '',
+    });
+  };
 
   const handleSubmit = async (e) => {
-    e.preventDefault()
-    setLoading(true)
-    setError('')
+    e.preventDefault();
+    setLoading(true);
+    setError('');
 
     try {
-      const from = location.state?.from?.pathname || (userType === 'user' ? '/profile' : '/business-profile')
-      
+      const from =
+        location.state?.from?.pathname || (userType === 'user' ? '/profile' : '/business-profile');
+
       if (isLogin) {
-        const result = await login(formData.email, formData.password, userType)
+        const result = await login(formData.email, formData.password, userType);
         if (result.success) {
-          navigate(from, { replace: true })
+          navigate(from, { replace: true });
         } else {
-          setError(result.error || 'Failed to login')
+          setError(result.error || 'Failed to login');
         }
       } else {
-        const additionalData = userType === 'user' 
-          ? { name: formData.name }
-          : {
-              businessName: formData.businessName,
-              description: formData.description,
-              category: formData.category,
-              address: formData.address,
-              phone: formData.phone
-            }
-        
-        const result = await signup(formData.email, formData.password, userType, additionalData)
+        const additionalData =
+          userType === 'user'
+            ? { name: formData.name }
+            : {
+                businessName: formData.businessName,
+                description: formData.description,
+                category: formData.category,
+                address: formData.address,
+                phone: formData.phone,
+              };
+
+        const result = await signup(formData.email, formData.password, userType, additionalData);
         if (result.success) {
-          navigate(from, { replace: true })
+          navigate(from, { replace: true });
         } else {
-          setError(result.error || 'Failed to sign up')
+          setError(result.error || 'Failed to sign up');
         }
       }
     } catch (err) {
-      setError('An unexpected error occurred')
-      console.error(err)
+      setError('An unexpected error occurred');
+      console.error(err);
     } finally {
-      setLoading(false)
+      setLoading(false);
     }
-  }
+  };
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-emerald-50 via-purple-50 to-blue-50 font-nunito">
@@ -135,7 +135,10 @@ function LoginPage() {
 
               {!isLogin && userType === 'user' && (
                 <div>
-                  <label htmlFor="name" className="block text-sm font-semibold text-gray-700 mb-2 font-nunito">
+                  <label
+                    htmlFor="name"
+                    className="block text-sm font-semibold text-gray-700 mb-2 font-nunito"
+                  >
                     Name
                   </label>
                   <input
@@ -154,7 +157,10 @@ function LoginPage() {
               {!isLogin && userType === 'business' && (
                 <>
                   <div>
-                    <label htmlFor="businessName" className="block text-sm font-semibold text-gray-700 mb-2 font-nunito">
+                    <label
+                      htmlFor="businessName"
+                      className="block text-sm font-semibold text-gray-700 mb-2 font-nunito"
+                    >
                       Business Name
                     </label>
                     <input
@@ -169,7 +175,10 @@ function LoginPage() {
                     />
                   </div>
                   <div>
-                    <label htmlFor="description" className="block text-sm font-semibold text-gray-700 mb-2 font-nunito">
+                    <label
+                      htmlFor="description"
+                      className="block text-sm font-semibold text-gray-700 mb-2 font-nunito"
+                    >
                       Description
                     </label>
                     <textarea
@@ -184,7 +193,10 @@ function LoginPage() {
                     />
                   </div>
                   <div>
-                    <label htmlFor="category" className="block text-sm font-semibold text-gray-700 mb-2 font-nunito">
+                    <label
+                      htmlFor="category"
+                      className="block text-sm font-semibold text-gray-700 mb-2 font-nunito"
+                    >
                       Category
                     </label>
                     <input
@@ -199,7 +211,10 @@ function LoginPage() {
                     />
                   </div>
                   <div>
-                    <label htmlFor="address" className="block text-sm font-semibold text-gray-700 mb-2 font-nunito">
+                    <label
+                      htmlFor="address"
+                      className="block text-sm font-semibold text-gray-700 mb-2 font-nunito"
+                    >
                       Address
                     </label>
                     <input
@@ -214,7 +229,10 @@ function LoginPage() {
                     />
                   </div>
                   <div>
-                    <label htmlFor="phone" className="block text-sm font-semibold text-gray-700 mb-2 font-nunito">
+                    <label
+                      htmlFor="phone"
+                      className="block text-sm font-semibold text-gray-700 mb-2 font-nunito"
+                    >
                       Phone
                     </label>
                     <input
@@ -232,7 +250,10 @@ function LoginPage() {
               )}
 
               <div>
-                <label htmlFor="email" className="block text-sm font-semibold text-gray-700 mb-2 font-nunito">
+                <label
+                  htmlFor="email"
+                  className="block text-sm font-semibold text-gray-700 mb-2 font-nunito"
+                >
                   Email
                 </label>
                 <input
@@ -248,7 +269,10 @@ function LoginPage() {
               </div>
 
               <div>
-                <label htmlFor="password" className="block text-sm font-semibold text-gray-700 mb-2 font-nunito">
+                <label
+                  htmlFor="password"
+                  className="block text-sm font-semibold text-gray-700 mb-2 font-nunito"
+                >
                   Password
                 </label>
                 <input
@@ -297,7 +321,7 @@ function LoginPage() {
         </div>
       </div>
     </div>
-  )
+  );
 }
 
-export default LoginPage 
+export default LoginPage;

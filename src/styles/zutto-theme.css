@@ -1,0 +1,134 @@
+/* ── Zutto Design Tokens ────────────────────────────────────────────────── */
+
+/* ── Light mode (default) ───────────────────────────────────────────────── */
+:root {
+  /* Brand greens */
+  --zutto-green-primary: #228b22;
+  --zutto-green-accent: #4caf50;
+  --zutto-green-dark: #145214;
+  --zutto-green-light: #e8f5e9;
+
+  /* Accent palette */
+  --zutto-amber: #e67e00;
+  --zutto-amber-light: #fff3cd;
+  --zutto-teal: #0097a7;
+  --zutto-teal-light: #e0f7fa;
+
+  /* Page surfaces — clear, airy separation */
+  --zutto-bg: #f5f7f5;
+  --zutto-bg-alt: #eef2ee;
+  --zutto-card: #ffffff;
+  --zutto-border: #dde5dd;
+  --zutto-border-strong: #c3d4c3;
+
+  /* Typography */
+  --zutto-text: #111827;
+  --zutto-text-muted: #4b5563;
+  --zutto-text-subtle: #9ca3af;
+
+  /* Interactive */
+  --zutto-primary-rgb: 34, 139, 34;
+  --zutto-amber-rgb: 230, 126, 0;
+  --zutto-teal-rgb: 0, 151, 167;
+
+  /* Hero overlay */
+  --zutto-hero-overlay: rgba(10, 20, 10, 0.52);
+
+  /* Radar mockup panel — always dark for visual contrast */
+  --zutto-panel-bg: #0d1f0d;
+  --zutto-panel-surface: #172817;
+  --zutto-panel-border: #254025;
+  --zutto-panel-text-muted: #6b7f6b;
+
+  /* Partner logos: no plate in light mode (logos already sit on light sections) */
+  --zutto-logo-plate-bg: transparent;
+  --zutto-logo-plate-border: 0 solid transparent;
+  --zutto-logo-plate-shadow: none;
+}
+
+/* ── Dark mode ──────────────────────────────────────────────────────────── */
+/*
+   Design rationale:
+   - Background: true dark slate-gray, NOT a dark green tint — avoids the
+     "swamp" effect where bg/card/border all blend together.
+   - Cards sit on top of bg with enough lightness contrast (~10 L* steps).
+   - Brand green is brightened so it reads as an accent, not a surface tone.
+   - Text is near-white at full strength, muted at ~60% for secondary copy.
+*/
+html[data-theme='dark'] {
+  /* Brand greens — brighter on dark so they pop as accents */
+  --zutto-green-primary: #4ade80;
+  --zutto-green-accent: #86efac;
+  --zutto-green-dark: #16a34a;
+  --zutto-green-light: #052e16;
+
+  /* Accent palette — warmer, more vivid on dark */
+  --zutto-amber: #fbbf24;
+  --zutto-amber-light: #1c1200;
+  --zutto-teal: #22d3ee;
+  --zutto-teal-light: #0a1e24;
+
+  /* Page surfaces — neutral dark grays, NOT dark greens */
+  --zutto-bg: #0f1117;
+  --zutto-bg-alt: #141820;
+  --zutto-card: #1e2330;
+  --zutto-border: #2d3448;
+  --zutto-border-strong: #3d4560;
+
+  /* Typography */
+  --zutto-text: #f1f5f9;
+  --zutto-text-muted: #94a3b8;
+  --zutto-text-subtle: #64748b;
+
+  /* Interactive RGB values for rgba() usage */
+  --zutto-primary-rgb: 74, 222, 128;
+  --zutto-amber-rgb: 251, 191, 36;
+  --zutto-teal-rgb: 34, 211, 238;
+
+  /* Hero overlay — deeper for dark mode */
+  --zutto-hero-overlay: rgba(0, 0, 0, 0.62);
+
+  /* Radar mockup — same intent, darker on dark */
+  --zutto-panel-bg: #070c07;
+  --zutto-panel-surface: #0f1a0f;
+  --zutto-panel-border: #1a2e1a;
+  --zutto-panel-text-muted: #4a624a;
+
+  /* Light plate + hairline border so full-color marks match print/digital guidelines */
+  --zutto-logo-plate-bg: #f8fafc;
+  --zutto-logo-plate-border: 0.0625rem solid rgba(148, 163, 184, 0.45);
+  --zutto-logo-plate-shadow: 0 0.0625rem 0.1875rem rgba(0, 0, 0, 0.12);
+}
+
+/* ── Smooth theme transitions ───────────────────────────────────────────── */
+html,
+body,
+header,
+footer,
+main,
+section,
+nav,
+aside {
+  transition:
+    background-color 0.25s ease,
+    color 0.25s ease,
+    border-color 0.25s ease;
+}
+
+/* No transitions on first load — avoids flash */
+html.theme-init * {
+  transition: none !important;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html,
+  body,
+  header,
+  footer,
+  main,
+  section,
+  nav,
+  aside {
+    transition: none;
+  }
+}

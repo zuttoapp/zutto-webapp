@@ -1,28 +1,26 @@
-import { useNavigate } from 'react-router-dom'
-import { useTranslation } from 'react-i18next'
-import Header from '../components/Header'
+import { useNavigate } from 'react-router-dom';
+import Header from '@/components/header';
+import { useAuth } from '@/contexts/auth-context';
 
 function DashboardPage() {
-  const navigate = useNavigate()
-  const { t } = useTranslation()
-
-  const handleLogout = () => {
-    console.log('User logged out')
-    navigate('/')
-  }
+  const navigate = useNavigate();
+  const { logout } = useAuth();
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-emerald-50 via-purple-50 to-blue-50 font-nunito">
-      {/* Header Component with Logout */}
-      <Header showLogout={true} onLogoutClick={handleLogout} />
+      <Header showLogout onLogoutClick={logout} />
 
       {/* Main Content */}
       <div className="pt-24 px-4 sm:px-6 lg:px-8">
         <div className="max-w-7xl mx-auto">
           {/* Dashboard Header */}
           <div className="mb-12">
-            <h1 className="text-5xl font-bold text-gray-900 mb-4 font-nunito">Business Dashboard</h1>
-            <p className="text-xl text-gray-600 font-nunito">Manage your business presence on Zutto</p>
+            <h1 className="text-5xl font-bold text-gray-900 mb-4 font-nunito">
+              Business Dashboard
+            </h1>
+            <p className="text-xl text-gray-600 font-nunito">
+              Manage your business presence on Zutto
+            </p>
           </div>
 
           {/* Stats Cards */}
@@ -34,7 +32,9 @@ function DashboardPage() {
                 </div>
                 <span className="text-3xl font-bold text-gray-900 font-nunito">127</span>
               </div>
-              <h3 className="text-lg font-semibold text-gray-900 mb-2 font-nunito">Total Check-ins</h3>
+              <h3 className="text-lg font-semibold text-gray-900 mb-2 font-nunito">
+                Total Check-ins
+              </h3>
               <p className="text-gray-600 font-nunito">+12% from last month</p>
             </div>
 
@@ -45,7 +45,9 @@ function DashboardPage() {
                 </div>
                 <span className="text-3xl font-bold text-gray-900 font-nunito">4.8</span>
               </div>
-              <h3 className="text-lg font-semibold text-gray-900 mb-2 font-nunito">Average Rating</h3>
+              <h3 className="text-lg font-semibold text-gray-900 mb-2 font-nunito">
+                Average Rating
+              </h3>
               <p className="text-gray-600 font-nunito">Based on 89 reviews</p>
             </div>
 
@@ -56,7 +58,9 @@ function DashboardPage() {
                 </div>
                 <span className="text-3xl font-bold text-gray-900 font-nunito">23</span>
               </div>
-              <h3 className="text-lg font-semibold text-gray-900 mb-2 font-nunito">New Followers</h3>
+              <h3 className="text-lg font-semibold text-gray-900 mb-2 font-nunito">
+                New Followers
+              </h3>
               <p className="text-gray-600 font-nunito">This week</p>
             </div>
 
@@ -67,7 +71,9 @@ function DashboardPage() {
                 </div>
                 <span className="text-3xl font-bold text-gray-900 font-nunito">85%</span>
               </div>
-              <h3 className="text-lg font-semibold text-gray-900 mb-2 font-nunito">Engagement Rate</h3>
+              <h3 className="text-lg font-semibold text-gray-900 mb-2 font-nunito">
+                Engagement Rate
+              </h3>
               <p className="text-gray-600 font-nunito">Above average</p>
             </div>
           </div>
@@ -120,7 +126,9 @@ function DashboardPage() {
                     A
                   </div>
                   <div className="flex-1">
-                    <p className="font-semibold text-gray-900 font-nunito">Ana shared your business</p>
+                    <p className="font-semibold text-gray-900 font-nunito">
+                      Ana shared your business
+                    </p>
                     <p className="text-gray-600 text-sm font-nunito">1 hour ago</p>
                   </div>
                 </div>
@@ -132,19 +140,19 @@ function DashboardPage() {
           <div className="bg-white/80 backdrop-blur-sm rounded-3xl shadow-xl p-8 border border-white/40">
             <h2 className="text-3xl font-bold text-gray-900 mb-6 font-nunito">Navigation Demo</h2>
             <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-              <button 
+              <button
                 onClick={() => navigate('/')}
                 className="bg-emerald-500 hover:bg-emerald-600 text-white py-4 rounded-2xl font-semibold transition-all transform hover:scale-105 shadow-lg hover:shadow-emerald-200 font-nunito"
               >
                 🏠 Back to Home
               </button>
-              <button 
+              <button
                 onClick={() => navigate('/search')}
                 className="bg-purple-500 hover:bg-purple-600 text-white py-4 rounded-2xl font-semibold transition-all transform hover:scale-105 shadow-lg hover:shadow-purple-200 font-nunito"
               >
                 🔍 Search Page
               </button>
-              <button 
+              <button
                 onClick={() => navigate('/business/demo')}
                 className="bg-blue-500 hover:bg-blue-600 text-white py-4 rounded-2xl font-semibold transition-all transform hover:scale-105 shadow-lg hover:shadow-blue-200 font-nunito"
               >
@@ -152,20 +160,10 @@ function DashboardPage() {
               </button>
             </div>
           </div>
-
-          {/* Debug Info */}
-          <div className="mt-8 bg-white/80 backdrop-blur-sm rounded-2xl shadow-lg p-6 border border-gray-200">
-            <h3 className="text-lg font-bold text-gray-900 mb-4 font-nunito">Dashboard Debug</h3>
-            <div className="space-y-2 text-gray-600 font-nunito">
-              <p><strong>Page:</strong> Business Dashboard</p>
-              <p><strong>User:</strong> Demo Business Owner</p>
-              <p><strong>Status:</strong> Demo Mode</p>
-            </div>
-          </div>
         </div>
       </div>
     </div>
-  )
+  );
 }
 
-export default DashboardPage 
+export default DashboardPage;
