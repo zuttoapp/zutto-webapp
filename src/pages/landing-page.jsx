@@ -4,16 +4,18 @@ import Header from '@/components/header';
 import Footer from '@/components/footer';
 import { SupportedByLogos } from '@/components/supported-by-logos';
 
+const BASE_URL = import.meta.env.BASE_URL;
+
 const HERO_VIDEOS = [
-  '/videos/zutto_landing_overlay.mp4',
-  '/videos/zutto_landing_overlay_2.mp4',
-  '/videos/zutto_landing_overlay_3.mp4',
-  '/videos/zutto_landing_overlay_4.mp4',
+  `${BASE_URL}videos/zutto_landing_overlay.mp4`,
+  `${BASE_URL}videos/zutto_landing_overlay_2.mp4`,
+  `${BASE_URL}videos/zutto_landing_overlay_3.mp4`,
+  `${BASE_URL}videos/zutto_landing_overlay_4.mp4`,
 ];
 
 const VIDEO_DURATIONS = [15000, 15000, 15000, 25000];
 const TRANSITION_DURATION = 800;
-const FALLBACK_IMAGE = '/images/hero-poster.jpg';
+const FALLBACK_IMAGE = `${BASE_URL}images/hero-poster.svg`;
 const WAITLIST_URL =
   'https://docs.google.com/forms/d/e/1FAIpQLSc4Ad9wDksTky7wIUvUEVnpXKVQ4iPECG5bID1w8hSIPiGjfQ/viewform?usp=dialog';
 
@@ -79,7 +81,7 @@ function SectionHeading({
           aria-hidden="true"
         />
       </span>
-      <h2 className="text-3xl sm:text-4xl md:text-5xl font-bold text-zutto-text font-montserrat leading-tight mb-5">
+      <h2 className="text-3xl sm:text-4xl md:text-5xl font-bold text-zutto-text font-quicksand leading-tight mb-5">
         {title}
       </h2>
       {subtitle && (
@@ -99,53 +101,49 @@ function LandingPage() {
   const [prefersReducedMotion, setPrefersReducedMotion] = useState(false);
   const [hasVideoError, setHasVideoError] = useState(false);
   const videoRef = useRef(null);
-  const transitionTimeoutRef = useRef(null);
-  const autoAdvanceTimeoutRef = useRef(null);
+  const autoAdvanceTimerRef = useRef(null);
 
+  // Detect reduced-motion preference
   useEffect(() => {
-    const videoEl = videoRef.current;
-    return () => {
-      if (videoEl) {
-        videoEl.pause();
-        videoEl.src = '';
-      }
-      if (transitionTimeoutRef.current) clearTimeout(transitionTimeoutRef.current);
-      if (autoAdvanceTimeoutRef.current) clearTimeout(autoAdvanceTimeoutRef.current);
-    };
+    const mq = window.matchMedia('(prefers-reduced-motion: reduce)');
+    setPrefersReducedMotion(mq.matches);
+    const handler = () => setPrefersReducedMotion(mq.matches);
+    mq.addEventListener('change', handler);
+    return () => mq.removeEventListener('change', handler);
   }, []);
 
-  useEffect(() => {
-    const mediaQuery = window.matchMedia('(prefers-reduced-motion: reduce)');
-    setPrefersReducedMotion(mediaQuery.matches);
-    const handler = () => setPrefersReducedMotion(mediaQuery.matches);
-    mediaQuery.addEventListener('change', handler);
-    return () => mediaQuery.removeEventListener('change', handler);
-  }, []);
-
+  // Advance to the next video after each clip's duration
   useEffect(() => {
     if (prefersReducedMotion || hasVideoError) return;
-    if (autoAdvanceTimeoutRef.current) clearTimeout(autoAdvanceTimeoutRef.current);
-    autoAdvanceTimeoutRef.current = setTimeout(() => {
+    autoAdvanceTimerRef.current = setTimeout(() => {
       setIsTransitioning(true);
-      transitionTimeoutRef.current = setTimeout(() => {
+      setTimeout(() => {
         setVideoIndex((i) => (i + 1) % HERO_VIDEOS.length);
         setIsTransitioning(false);
       }, TRANSITION_DURATION);
     }, VIDEO_DURATIONS[videoIndex]);
-    return () => {
-      if (autoAdvanceTimeoutRef.current) clearTimeout(autoAdvanceTimeoutRef.current);
-    };
+    return () => clearTimeout(autoAdvanceTimerRef.current);
   }, [videoIndex, prefersReducedMotion, hasVideoError]);
+
+  // Cleanup only on unmount — never wipe src during normal playback
+  useEffect(() => {
+    return () => {
+      clearTimeout(autoAdvanceTimerRef.current);
+      // eslint-disable-next-line react-hooks/exhaustive-deps
+      videoRef.current?.pause();
+    };
+  }, []);
+
+  const handleVideoCanPlay = () => {
+    setHasVideoError(false);
+    videoRef.current?.play().catch(() => {
+      /* autoplay blocked — browser will show poster frame, that's fine */
+    });
+  };
 
   const handleVideoError = () => {
     setHasVideoError(true);
-    setTimeout(() => {
-      setHasVideoError(false);
-      setVideoIndex((i) => (i + 1) % HERO_VIDEOS.length);
-    }, 2000);
   };
-
-  const handleVideoLoad = () => setHasVideoError(false);
 
   /* ── Data ─────────────────────────────────────────────────────────────── */
   const challengeKeys = ['example1', 'example2', 'example3', 'example4'];
@@ -181,33 +179,33 @@ function LandingPage() {
           UX:   Full-viewport video backdrop with dark overlay for legibility.
                 Green CTA stands out from the white/glass elements used elsewhere.
       ═══════════════════════════════════════════════════════════════════ */}
-      <section className="relative overflow-hidden" style={{ minHeight: '100vh' }}>
+      <section className="relative isolate overflow-hidden" style={{ minHeight: '100vh' }}>
         {/* Background */}
-        <div className="absolute inset-0 -z-10">
-          {!prefersReducedMotion && !hasVideoError ? (
+        <div className="absolute inset-0 z-0">
+          {/* Fallback is always rendered; video layers on top when available */}
+          <img
+            src={FALLBACK_IMAGE}
+            alt=""
+            aria-hidden="true"
+            className="absolute inset-0 w-full h-full object-cover"
+          />
+          {!prefersReducedMotion && (
             <video
+              key={videoIndex}
               ref={videoRef}
-              autoPlay
               muted
               playsInline
-              preload="metadata"
-              poster={FALLBACK_IMAGE}
+              autoPlay
+              preload="auto"
               src={HERO_VIDEOS[videoIndex]}
-              className="w-full h-full object-cover"
+              className="absolute inset-0 w-full h-full object-cover"
               style={{
                 opacity: isTransitioning ? 0 : 1,
-                transition: 'opacity 0.8s ease',
+                transition: `opacity ${TRANSITION_DURATION}ms ease`,
               }}
+              onCanPlay={handleVideoCanPlay}
               onEnded={() => setVideoIndex((i) => (i + 1) % HERO_VIDEOS.length)}
               onError={handleVideoError}
-              onLoadedData={handleVideoLoad}
-            />
-          ) : (
-            <img
-              src={FALLBACK_IMAGE}
-              alt=""
-              aria-hidden="true"
-              className="w-full h-full object-cover"
             />
           )}
           {/* Two-layer overlay: base dark + subtle vignette at bottom */}
@@ -224,7 +222,10 @@ function LandingPage() {
         </div>
 
         {/* Content */}
-        <div className="relative flex flex-col items-center justify-center min-h-screen text-center px-4 sm:px-8 z-10 pt-24 pb-16 gap-7">
+        <div
+          className="relative flex flex-col items-center justify-center min-h-screen text-center px-4 sm:px-8 z-10 pt-24 pb-16 gap-7"
+          style={{ display: 'flex', minHeight: '100vh' }}
+        >
           {/* Status pill */}
           <div
             className="inline-flex items-center gap-2 rounded-full px-4 py-2 text-sm font-semibold"
@@ -244,7 +245,7 @@ function LandingPage() {
 
           {/* Headline */}
           <h1
-            className="text-4xl sm:text-6xl md:text-7xl font-bold text-white max-w-4xl font-montserrat leading-[1.1] tracking-tight"
+            className="text-4xl sm:text-6xl md:text-7xl font-bold text-white max-w-4xl font-quicksand leading-[1.1] tracking-tight"
             style={{ textShadow: '0 2px 20px rgba(0,0,0,0.4)' }}
           >
             {t('hero.headline')}
@@ -325,7 +326,7 @@ function LandingPage() {
               <p className="text-xs font-bold uppercase tracking-widest text-zutto-primary mb-3">
                 {t('landing.forUsers')}
               </p>
-              <h3 className="text-xl sm:text-2xl font-bold text-zutto-text mb-3 font-montserrat leading-snug">
+              <h3 className="text-xl sm:text-2xl font-bold text-zutto-text mb-3 font-quicksand leading-snug">
                 {t('whyZutto.userHeadline')}
               </h3>
               <p className="text-zutto-muted leading-relaxed font-nunito flex-1">
@@ -377,7 +378,7 @@ function LandingPage() {
               <p className="text-xs font-bold uppercase tracking-widest text-zutto-amber mb-3">
                 {t('landing.forBusinesses')}
               </p>
-              <h3 className="text-xl sm:text-2xl font-bold text-zutto-text mb-3 font-montserrat leading-snug">
+              <h3 className="text-xl sm:text-2xl font-bold text-zutto-text mb-3 font-quicksand leading-snug">
                 {t('whyZutto.businessHeadline')}
               </h3>
               <p className="text-zutto-muted leading-relaxed font-nunito flex-1">
@@ -388,7 +389,7 @@ function LandingPage() {
                 className="mt-6 pt-5 flex items-end gap-4"
                 style={{ borderTop: '1px solid var(--zutto-border)' }}
               >
-                <span className="text-5xl font-bold font-montserrat text-zutto-amber leading-none">
+                <span className="text-5xl font-bold font-quicksand text-zutto-amber leading-none">
                   {t('whyZutto.stat')}
                 </span>
                 <div>
@@ -464,7 +465,7 @@ function LandingPage() {
                 {/* Step number + label */}
                 <div className="flex items-center justify-between mb-6">
                   <span
-                    className="text-5xl font-black font-montserrat leading-none"
+                    className="text-5xl font-black font-quicksand leading-none"
                     style={{ color: `rgba(${step.rgb}, 0.18)` }}
                   >
                     {step.num}
@@ -484,7 +485,7 @@ function LandingPage() {
                   {step.icon}
                 </div>
                 <h3
-                  className="text-xl font-bold text-zutto-text mb-3 font-montserrat"
+                  className="text-xl font-bold text-zutto-text mb-3 font-quicksand"
                   style={{ color: 'var(--zutto-text)' }}
                 >
                   {step.title}
@@ -530,7 +531,7 @@ function LandingPage() {
               </span>
               <h2
                 id="radar-heading"
-                className="text-3xl sm:text-4xl md:text-5xl font-bold text-zutto-text font-montserrat leading-tight mb-5"
+                className="text-3xl sm:text-4xl md:text-5xl font-bold text-zutto-text font-quicksand leading-tight mb-5"
               >
                 {t('radarSpotlight.title')}
               </h2>
@@ -773,7 +774,7 @@ function LandingPage() {
                     </span>
                   </div>
 
-                  <h3 className="font-bold text-zutto-text mb-2 font-montserrat text-base">
+                  <h3 className="font-bold text-zutto-text mb-2 font-quicksand text-base">
                     {t(`challenges.${key}.title`)}
                   </h3>
                   <p className="text-zutto-muted text-sm leading-relaxed font-nunito flex-1">
@@ -785,7 +786,7 @@ function LandingPage() {
                     className="mt-5 pt-4 flex items-center justify-between"
                     style={{ borderTop: `1px solid rgba(${c.rgb}, 0.15)` }}
                   >
-                    <p className="text-lg font-black font-montserrat" style={{ color: c.solid }}>
+                    <p className="text-lg font-black font-quicksand" style={{ color: c.solid }}>
                       {t(`challenges.${key}.points`)}
                     </p>
                     <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true">
@@ -846,7 +847,7 @@ function LandingPage() {
               <p className="text-xs font-bold uppercase tracking-widest text-zutto-primary mb-2">
                 {t('landing.featuredInsight')}
               </p>
-              <h3 className="text-xl sm:text-2xl font-bold text-zutto-text mb-3 font-montserrat">
+              <h3 className="text-xl sm:text-2xl font-bold text-zutto-text mb-3 font-quicksand">
                 {t('businessDashboard.feature1.title')}
               </h3>
               <p className="text-zutto-muted leading-relaxed font-nunito">
@@ -879,7 +880,7 @@ function LandingPage() {
                     {t(`businessDashboard.${key}.icon`)}
                   </div>
                   <div>
-                    <h3 className="font-bold text-zutto-text mb-1.5 font-montserrat text-base">
+                    <h3 className="font-bold text-zutto-text mb-1.5 font-quicksand text-base">
                       {t(`businessDashboard.${key}.title`)}
                     </h3>
                     <p className="text-zutto-muted text-sm leading-relaxed font-nunito">
@@ -925,7 +926,7 @@ function LandingPage() {
 
           <h2
             id="supported-by-heading"
-            className="text-2xl sm:text-3xl md:text-4xl font-bold text-zutto-text font-montserrat mb-5 leading-tight"
+            className="text-2xl sm:text-3xl md:text-4xl font-bold text-zutto-text font-quicksand mb-5 leading-tight"
           >
             {t('supportedBy.validationHeadline')}
           </h2>
@@ -995,7 +996,7 @@ function LandingPage() {
 
           <h2
             id="final-cta-heading"
-            className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold text-white mb-5 font-montserrat leading-tight"
+            className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold text-white mb-5 font-quicksand leading-tight"
           >
             {t('finalCta.title')}
           </h2>

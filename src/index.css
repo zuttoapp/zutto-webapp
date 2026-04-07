@@ -115,59 +115,10 @@ a:focus-visible {
 
 /* Landing Page Custom Styles */
 
-/* Hero Video Background - Accessibility Support */
-@media (prefers-reduced-motion: reduce) {
-  .hero-video {
-    display: none !important;
-  }
-  .hero-image {
-    display: block !important;
-  }
-}
-
-/* Optimize single video with source switching */
+/* Hero video — non-interactive, sits behind overlay */
 .hero-video {
+  pointer-events: none;
   will-change: opacity;
-  pointer-events: none; /* Videos don't interfere with interactions */
-}
-
-/* Smooth video source transitions */
-.hero-video {
-  transition: opacity 500ms ease-in-out;
-}
-
-/* Subtle parallax effect - reduced for multiple videos */
-.hero-image {
-  animation: heroFloat 20s ease-in-out infinite;
-}
-
-@keyframes heroFloat {
-  0%,
-  100% {
-    transform: scale(1) translateY(0);
-  }
-  50% {
-    transform: scale(1.01) translateY(-3px);
-  }
-}
-
-@media (max-width: 768px) {
-  .hero-video {
-    display: none !important; /* Hide video on mobile to save data */
-  }
-
-  /* Mobile users see static image only */
-  .hero-video,
-  .hero-image {
-    animation: none;
-  }
-}
-
-/* Connection quality optimization */
-@media (prefers-reduced-data: reduce) {
-  .hero-video {
-    display: none !important;
-  }
 }
 
 .radar-ring {
