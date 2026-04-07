@@ -1,8 +1,8 @@
-import { useTranslation } from 'react-i18next'
-import Header from '../components/Header'
+import { useTranslation } from 'react-i18next';
+import Header from '@/components/header';
 
 function AboutPage() {
-  const { t } = useTranslation()
+  const { t } = useTranslation();
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-emerald-50 via-purple-50 to-blue-50 font-nunito">
@@ -18,7 +18,10 @@ function AboutPage() {
               {t('about.title', 'About Zutto')}
             </h1>
             <p className="text-2xl text-gray-600 max-w-3xl mx-auto font-nunito font-light">
-              {t('about.subtitle', 'Connecting communities with local businesses through meaningful experiences')}
+              {t(
+                'about.subtitle',
+                'Connecting communities with local businesses through meaningful experiences',
+              )}
             </p>
           </div>
 
@@ -29,7 +32,10 @@ function AboutPage() {
                 {t('about.mission.title', 'Our Mission')}
               </h2>
               <p className="text-xl text-gray-600 leading-relaxed mb-8 font-nunito">
-                {t('about.mission.text', 'At Zutto, we believe in the power of local communities. Our mission is to create meaningful connections between people and their neighborhood businesses, fostering a sustainable ecosystem where everyone thrives.')}
+                {t(
+                  'about.mission.text',
+                  'At Zutto, we believe in the power of local communities. Our mission is to create meaningful connections between people and their neighborhood businesses, fostering a sustainable ecosystem where everyone thrives.',
+                )}
               </p>
               <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
                 <div className="text-center">
@@ -51,7 +57,10 @@ function AboutPage() {
                     {t('about.mission.values.innovation', 'Innovation')}
                   </h3>
                   <p className="text-gray-600 font-nunito">
-                    {t('about.mission.values.innovationText', 'Creating new ways to support local businesses')}
+                    {t(
+                      'about.mission.values.innovationText',
+                      'Creating new ways to support local businesses',
+                    )}
                   </p>
                 </div>
                 <div className="text-center">
@@ -62,7 +71,10 @@ function AboutPage() {
                     {t('about.mission.values.sustainability', 'Sustainability')}
                   </h3>
                   <p className="text-gray-600 font-nunito">
-                    {t('about.mission.values.sustainabilityText', 'Promoting long-term local economic growth')}
+                    {t(
+                      'about.mission.values.sustainabilityText',
+                      'Promoting long-term local economic growth',
+                    )}
                   </p>
                 </div>
               </div>
@@ -84,15 +96,11 @@ function AboutPage() {
                 </div>
                 <div className="text-center">
                   <div className="text-5xl font-bold mb-2 font-nunito">10k+</div>
-                  <p className="text-lg font-nunito">
-                    {t('about.impact.users', 'Active Users')}
-                  </p>
+                  <p className="text-lg font-nunito">{t('about.impact.users', 'Active Users')}</p>
                 </div>
                 <div className="text-center">
                   <div className="text-5xl font-bold mb-2 font-nunito">25k+</div>
-                  <p className="text-lg font-nunito">
-                    {t('about.impact.checkins', 'Check-ins')}
-                  </p>
+                  <p className="text-lg font-nunito">{t('about.impact.checkins', 'Check-ins')}</p>
                 </div>
               </div>
             </div>
@@ -117,7 +125,10 @@ function AboutPage() {
                       {t('about.team.founder.role', 'Founder & CEO')}
                     </p>
                     <p className="text-gray-600 font-nunito">
-                      {t('about.team.founder.bio', 'Passionate about building communities and supporting local businesses.')}
+                      {t(
+                        'about.team.founder.bio',
+                        'Passionate about building communities and supporting local businesses.',
+                      )}
                     </p>
                   </div>
                 </div>
@@ -133,7 +144,10 @@ function AboutPage() {
                       {t('about.team.cto.role', 'CTO')}
                     </p>
                     <p className="text-gray-600 font-nunito">
-                      {t('about.team.cto.bio', 'Tech enthusiast focused on creating seamless user experiences.')}
+                      {t(
+                        'about.team.cto.bio',
+                        'Tech enthusiast focused on creating seamless user experiences.',
+                      )}
                     </p>
                   </div>
                 </div>
@@ -148,7 +162,10 @@ function AboutPage() {
                 {t('about.contact.title', 'Get in Touch')}
               </h2>
               <p className="text-xl mb-8 font-nunito">
-                {t('about.contact.text', 'Have questions or want to learn more? We\'d love to hear from you!')}
+                {t(
+                  'about.contact.text',
+                  "Have questions or want to learn more? We'd love to hear from you!",
+                )}
               </p>
               <div className="flex flex-col sm:flex-row gap-4 justify-center">
                 <a
@@ -171,7 +188,7 @@ function AboutPage() {
         </div>
       </div>
     </div>
-  )
+  );
 }
 
-export default AboutPage 
+export default AboutPage;

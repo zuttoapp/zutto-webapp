@@ -2,7 +2,7 @@
 
 **Zutto** is a digital companion for discovering authentic local spots in Puerto Rico. From hidden cafés and street food gems to art studios and live music, Zutto turns exploring your surroundings into a rewarding and fun experience.
 
-> *This repository is used for deployment purposes only.*  
+> _This repository is used for deployment purposes only._  
 > To learn more, visit: [https://zuttoapp.com](https://zuttoapp.com)
 
 ---
@@ -10,6 +10,7 @@
 ## 🧭 What is Zutto?
 
 Zutto helps you:
+
 - ✅ Discover authentic local experiences
 - 📍 Check in at local spots with a tap or scan
 - 🏆 Earn rewards for your visits
@@ -35,4 +36,4 @@ To learn more, follow us on social media or visit the [official site](https://zu
 
 **Made with ❤️ in Puerto Rico**
 
-*Zutto is not open source at this time.*
+_Zutto is not open source at this time._

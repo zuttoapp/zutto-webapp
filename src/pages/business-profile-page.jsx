@@ -1,14 +1,10 @@
-import { useState } from 'react'
-import { useNavigate } from 'react-router-dom'
-import { useTranslation } from 'react-i18next'
-import { useAuth } from '../contexts/AuthContext'
-import Header from '../components/Header'
+import { useState } from 'react';
+import { useAuth } from '@/contexts/auth-context';
+import Header from '@/components/header';
 
 function BusinessProfilePage() {
-  const navigate = useNavigate()
-  const { t } = useTranslation()
-  const { user, updateProfile } = useAuth()
-  const [isEditing, setIsEditing] = useState(false)
+  const { user, updateProfile } = useAuth();
+  const [isEditing, setIsEditing] = useState(false);
   const [formData, setFormData] = useState({
     description: user?.description || '',
     category: user?.category || '',
@@ -21,71 +17,71 @@ function BusinessProfilePage() {
       thursday: { open: '09:00', close: '17:00' },
       friday: { open: '09:00', close: '17:00' },
       saturday: { open: '10:00', close: '15:00' },
-      sunday: { open: '10:00', close: '15:00' }
+      sunday: { open: '10:00', close: '15:00' },
     },
-    amenities: user?.amenities || []
-  })
-  const [newAmenity, setNewAmenity] = useState('')
-  const [loading, setLoading] = useState(false)
-  const [error, setError] = useState('')
+    amenities: user?.amenities || [],
+  });
+  const [newAmenity, setNewAmenity] = useState('');
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState('');
 
   const handleInputChange = (e) => {
-    const { name, value } = e.target
-    setFormData(prev => ({
+    const { name, value } = e.target;
+    setFormData((prev) => ({
       ...prev,
-      [name]: value
-    }))
-  }
+      [name]: value,
+    }));
+  };
 
   const handleHoursChange = (day, field, value) => {
-    setFormData(prev => ({
+    setFormData((prev) => ({
       ...prev,
       hours: {
         ...prev.hours,
         [day]: {
           ...prev.hours[day],
-          [field]: value
-        }
-      }
-    }))
-  }
+          [field]: value,
+        },
+      },
+    }));
+  };
 
   const handleAddAmenity = () => {
     if (newAmenity.trim() && !formData.amenities.includes(newAmenity.trim())) {
-      setFormData(prev => ({
+      setFormData((prev) => ({
         ...prev,
-        amenities: [...prev.amenities, newAmenity.trim()]
-      }))
-      setNewAmenity('')
+        amenities: [...prev.amenities, newAmenity.trim()],
+      }));
+      setNewAmenity('');
     }
-  }
+  };
 
   const handleRemoveAmenity = (amenity) => {
-    setFormData(prev => ({
+    setFormData((prev) => ({
       ...prev,
-      amenities: prev.amenities.filter(a => a !== amenity)
-    }))
-  }
+      amenities: prev.amenities.filter((a) => a !== amenity),
+    }));
+  };
 
   const handleSubmit = async (e) => {
-    e.preventDefault()
-    setLoading(true)
-    setError('')
+    e.preventDefault();
+    setLoading(true);
+    setError('');
 
     try {
-      const result = await updateProfile(formData)
+      const result = await updateProfile(formData);
       if (result.success) {
-        setIsEditing(false)
+        setIsEditing(false);
       } else {
-        setError(result.error || 'Failed to update profile')
+        setError(result.error || 'Failed to update profile');
       }
     } catch (err) {
-      setError('An unexpected error occurred')
-      console.error(err)
+      setError('An unexpected error occurred');
+      console.error(err);
     } finally {
-      setLoading(false)
+      setLoading(false);
     }
-  }
+  };
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-emerald-50 via-purple-50 to-blue-50 font-nunito">
@@ -110,7 +106,9 @@ function BusinessProfilePage() {
             <div className="pt-20 pb-8 px-8">
               <div className="flex justify-between items-start">
                 <div>
-                  <h1 className="text-3xl font-bold text-gray-900 mb-2 font-nunito">{user?.businessName}</h1>
+                  <h1 className="text-3xl font-bold text-gray-900 mb-2 font-nunito">
+                    {user?.businessName}
+                  </h1>
                   <p className="text-gray-600 font-nunito">{user?.email}</p>
                 </div>
                 <button
@@ -136,7 +134,10 @@ function BusinessProfilePage() {
                   )}
 
                   <div>
-                    <label htmlFor="description" className="block text-sm font-semibold text-gray-700 mb-2 font-nunito">
+                    <label
+                      htmlFor="description"
+                      className="block text-sm font-semibold text-gray-700 mb-2 font-nunito"
+                    >
                       Description
                     </label>
                     <textarea
@@ -151,7 +152,10 @@ function BusinessProfilePage() {
                   </div>
 
                   <div>
-                    <label htmlFor="category" className="block text-sm font-semibold text-gray-700 mb-2 font-nunito">
+                    <label
+                      htmlFor="category"
+                      className="block text-sm font-semibold text-gray-700 mb-2 font-nunito"
+                    >
                       Category
                     </label>
                     <input
@@ -166,7 +170,10 @@ function BusinessProfilePage() {
                   </div>
 
                   <div>
-                    <label htmlFor="address" className="block text-sm font-semibold text-gray-700 mb-2 font-nunito">
+                    <label
+                      htmlFor="address"
+                      className="block text-sm font-semibold text-gray-700 mb-2 font-nunito"
+                    >
                       Address
                     </label>
                     <input
@@ -181,7 +188,10 @@ function BusinessProfilePage() {
                   </div>
 
                   <div>
-                    <label htmlFor="phone" className="block text-sm font-semibold text-gray-700 mb-2 font-nunito">
+                    <label
+                      htmlFor="phone"
+                      className="block text-sm font-semibold text-gray-700 mb-2 font-nunito"
+                    >
                       Phone
                     </label>
                     <input
@@ -271,27 +281,43 @@ function BusinessProfilePage() {
               ) : (
                 <div className="space-y-6">
                   <div>
-                    <h3 className="text-lg font-semibold text-gray-900 mb-2 font-nunito">Description</h3>
-                    <p className="text-gray-600 font-nunito">{formData.description || 'No description yet'}</p>
+                    <h3 className="text-lg font-semibold text-gray-900 mb-2 font-nunito">
+                      Description
+                    </h3>
+                    <p className="text-gray-600 font-nunito">
+                      {formData.description || 'No description yet'}
+                    </p>
                   </div>
 
                   <div>
-                    <h3 className="text-lg font-semibold text-gray-900 mb-2 font-nunito">Category</h3>
-                    <p className="text-gray-600 font-nunito">{formData.category || 'No category set'}</p>
+                    <h3 className="text-lg font-semibold text-gray-900 mb-2 font-nunito">
+                      Category
+                    </h3>
+                    <p className="text-gray-600 font-nunito">
+                      {formData.category || 'No category set'}
+                    </p>
                   </div>
 
                   <div>
-                    <h3 className="text-lg font-semibold text-gray-900 mb-2 font-nunito">Address</h3>
-                    <p className="text-gray-600 font-nunito">{formData.address || 'No address set'}</p>
+                    <h3 className="text-lg font-semibold text-gray-900 mb-2 font-nunito">
+                      Address
+                    </h3>
+                    <p className="text-gray-600 font-nunito">
+                      {formData.address || 'No address set'}
+                    </p>
                   </div>
 
                   <div>
                     <h3 className="text-lg font-semibold text-gray-900 mb-2 font-nunito">Phone</h3>
-                    <p className="text-gray-600 font-nunito">{formData.phone || 'No phone number set'}</p>
+                    <p className="text-gray-600 font-nunito">
+                      {formData.phone || 'No phone number set'}
+                    </p>
                   </div>
 
                   <div>
-                    <h3 className="text-lg font-semibold text-gray-900 mb-2 font-nunito">Business Hours</h3>
+                    <h3 className="text-lg font-semibold text-gray-900 mb-2 font-nunito">
+                      Business Hours
+                    </h3>
                     <div className="space-y-2">
                       {Object.entries(formData.hours).map(([day, hours]) => (
                         <div key={day} className="flex items-center gap-4">
@@ -305,7 +331,9 @@ function BusinessProfilePage() {
                   </div>
 
                   <div>
-                    <h3 className="text-lg font-semibold text-gray-900 mb-2 font-nunito">Amenities</h3>
+                    <h3 className="text-lg font-semibold text-gray-900 mb-2 font-nunito">
+                      Amenities
+                    </h3>
                     <div className="flex flex-wrap gap-2">
                       {formData.amenities.length > 0 ? (
                         formData.amenities.map((amenity, index) => (
@@ -332,21 +360,29 @@ function BusinessProfilePage() {
                 <div className="space-y-4">
                   <div className="flex justify-between items-center">
                     <span className="text-gray-600 font-nunito">Total Check-ins</span>
-                    <span className="text-2xl font-bold text-emerald-600 font-nunito">{user?.checkIns || 0}</span>
+                    <span className="text-2xl font-bold text-emerald-600 font-nunito">
+                      {user?.checkIns || 0}
+                    </span>
                   </div>
                   <div className="flex justify-between items-center">
                     <span className="text-gray-600 font-nunito">Active Rewards</span>
-                    <span className="text-2xl font-bold text-emerald-600 font-nunito">{user?.activeRewards?.length || 0}</span>
+                    <span className="text-2xl font-bold text-emerald-600 font-nunito">
+                      {user?.activeRewards?.length || 0}
+                    </span>
                   </div>
                   <div className="flex justify-between items-center">
                     <span className="text-gray-600 font-nunito">Reviews</span>
-                    <span className="text-2xl font-bold text-emerald-600 font-nunito">{user?.reviews?.length || 0}</span>
+                    <span className="text-2xl font-bold text-emerald-600 font-nunito">
+                      {user?.reviews?.length || 0}
+                    </span>
                   </div>
                 </div>
               </div>
 
               <div className="bg-white/80 backdrop-blur-sm rounded-3xl shadow-xl p-6 border border-white/40">
-                <h3 className="text-lg font-semibold text-gray-900 mb-4 font-nunito">Recent Activity</h3>
+                <h3 className="text-lg font-semibold text-gray-900 mb-4 font-nunito">
+                  Recent Activity
+                </h3>
                 <div className="space-y-4">
                   <p className="text-gray-600 font-nunito">No recent activity</p>
                 </div>
@@ -356,7 +392,7 @@ function BusinessProfilePage() {
         </div>
       </div>
     </div>
-  )
+  );
 }
 
-export default BusinessProfilePage 
+export default BusinessProfilePage;

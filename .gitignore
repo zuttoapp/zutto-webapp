@@ -22,3 +22,8 @@ dist-ssr
 *.njsproj
 *.sln
 *.sw?
+docs/
+
+# Local-only agent / AI context (see AGENTS.md)
+AGENTS.local.md
+.cursor/rules/local.mdc
